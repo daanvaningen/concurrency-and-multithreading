@@ -16,6 +16,7 @@ public class Worker {
 
     private final Graph graph;
     private final Colors colors = new Colors();
+    private int threadNumber;
     private boolean result = false;
 
     // Throwing an exception is a convenient way to cut off the search in case a
@@ -32,18 +33,18 @@ public class Worker {
      * @throws FileNotFoundException
      *             is thrown in case the file could not be read.
      */
-    public Worker(File promelaFile) throws FileNotFoundException {
-
+    public Worker(File promelaFile, int threadNumber) throws FileNotFoundException {
+        this.threadNumber = threadNumber;
         this.graph = GraphFactory.createGraph(promelaFile);
     }
 
     private void dfsRed(State s) throws CycleFoundException {
 
         for (State t : graph.post(s)) {
-            if (colors.hasColor(t, Color.CYAN)) {
+            if (colors.hasColor(t, Color.CYAN, this.threadNumber)) {
                 throw new CycleFoundException();
-            } else if (colors.hasColor(t, Color.BLUE)) {
-                colors.color(t, Color.RED);
+            } else if (colors.hasColor(t, Color.BLUE, this.threadNumber)) {
+                colors.color(t, Color.RED, this.threadNumber);
                 dfsRed(t);
             }
         }
@@ -51,17 +52,17 @@ public class Worker {
 
     private void dfsBlue(State s) throws CycleFoundException {
 
-        colors.color(s, Color.CYAN);
+        colors.color(s, Color.CYAN, this.threadNumber);
         for (State t : graph.post(s)) {
-            if (colors.hasColor(t, Color.WHITE)) {
+            if (colors.hasColor(t, Color.WHITE, this.threadNumber)) {
                 dfsBlue(t);
             }
         }
         if (s.isAccepting()) {
             dfsRed(s);
-            colors.color(s, Color.RED);
+            colors.color(s, Color.RED, this.threadNumber);
         } else {
-            colors.color(s, Color.BLUE);
+            colors.color(s, Color.BLUE, this.threadNumber);
         }
     }
 
