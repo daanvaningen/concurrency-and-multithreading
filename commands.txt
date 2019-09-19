@@ -1,0 +1,5 @@
+# compile
+./bin/build.sh
+
+# run (accept-cycle file, 1_naive version, 1 core)
+./bin/ndfs.sh input/accept-cycle.prom 1_naive 1

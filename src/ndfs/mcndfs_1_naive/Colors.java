@@ -14,6 +14,11 @@ public class Colors {
   private final Map<State, Integer> count = new HashMap<State, Integer>();
   private final Map<State, Boolean[]> pink = new HashMap<State, Boolean[]>();
   private final Map<State, Boolean> red = new HashMap<State, Boolean>();
+  private int numThreads;
+
+  public Colors(int numThreads) {
+    this.numThreads = numThreads;
+  }
   /**
   * Returns <code>true</code> if the specified state has the specified color,
   * <code>false</code> otherwise.
@@ -24,13 +29,19 @@ public class Colors {
   *            the color
   * @return whether the specified state has the specified color.
   */
-  public boolean hasColor(State state, Color color, int threadNumber) {
+  public synchronized boolean hasColor(State state, Color color, int threadNumber) {
+    Color[] current = this.color.get(state);
+    if (current == null) { // initialise
+      Color[] initColor = new Color[numThreads];
+      this.color.put(state, initColor);
+      current = initColor;
+    }
 
     // The initial color is white, and is not explicitly represented.
     if (color == Color.WHITE) {
-      return this.color.get(state)[threadNumber] == null;
+      return current[threadNumber] == null;
     } else {
-      return this.color.get(state)[threadNumber] == color;
+      return current[threadNumber] == color;
     }
   }
 
@@ -42,8 +53,13 @@ public class Colors {
   * @param color
   *            color to give to the state.
   */
-  public void color(State state, Color color, int threadNumber) {
+  public synchronized void color(State state, Color color, int threadNumber) {
     Color[] current = this.color.get(state);
+    if (current == null) { // initialise
+      Color[] initColor = new Color[numThreads];
+      current = initColor;
+    }
+
     if (color == Color.WHITE) {
       current[threadNumber] = null;
       // color.remove(state);
@@ -60,8 +76,11 @@ public class Colors {
   * @param state state of which to increment the count
   * @param change amount to change the current count by
   */
-  public void changeCount(State state, int change) {
-    int currentCount = this.count.get(state);
+  public synchronized void changeCount(State state, int change) {
+    Integer currentCount = this.count.get(state);
+    if (currentCount == null) {
+      currentCount = 0;
+    }
     currentCount += change;
     this.count.put(state, currentCount);
   }
@@ -71,7 +90,7 @@ public class Colors {
   *
   * @param state state of which to get the count
   */
-  public int getCount(State state) {
+  public synchronized int getCount(State state) {
     return this.count.get(state);
   }
 
@@ -81,13 +100,20 @@ public class Colors {
   * @param state state of which to increment the count
   * @param change amount to change the current count by
   */
-  public void setPink(State state, boolean isPink, int threadNumber) {
+  public synchronized void setPink(State state, boolean isPink, int threadNumber) {
     Boolean[] current = this.pink.get(state);
+    if (current == null) {
+      Boolean[] initPink = new Boolean[this.numThreads];
+      current = initPink;
+    }
     current[threadNumber] = isPink;
     this.pink.put(state, current);
   }
 
-  public Boolean getPink(State state, int threadNumber) {
+  /**
+   * Check whether the current state is pink for this thread
+   */
+  public synchronized Boolean isPink(State state, int threadNumber) {
     return this.pink.get(state)[threadNumber];
   }
 
@@ -96,7 +122,15 @@ public class Colors {
   *
   * @param state the state to check
   */
-  public Boolean isRed(State state) {
+  public synchronized Boolean isRed(State state) {
+    Boolean current = this.red.get(state);
+    if (current == null) {
+      this.red.put(state, false);
+    }
     return this.red.get(state);
+  }
+
+  public synchronized void setRed(State state) {
+    this.red.put(state, true);
   }
 }

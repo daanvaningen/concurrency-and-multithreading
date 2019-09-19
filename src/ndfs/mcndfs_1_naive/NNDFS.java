@@ -10,8 +10,10 @@ import ndfs.NDFS;
 * worker class.
 */
 public class NNDFS implements NDFS {
-
-  private final Worker worker;
+  private final Worker[] workers;
+  private final Colors colors;
+  private final File promelaFile;
+  private int numThreads;
 
   /**
   * Constructs an NDFS object using the specified Promela file.
@@ -22,13 +24,38 @@ public class NNDFS implements NDFS {
   *             is thrown in case the file could not be read.
   */
   public NNDFS(File promelaFile, int numThreads) throws FileNotFoundException {
-    System.out.println(numThreads);
-    this.worker = new Worker(promelaFile, numThreads);
+    this.workers = new Worker[numThreads];
+    this.colors = new Colors(numThreads);
+    this.promelaFile = promelaFile;
+    this.numThreads = numThreads;
+
+    for (int i = 0; i < this.numThreads; i++) {
+      this.workers[i] = new Worker(this.promelaFile, this.colors, i);
+    }
   }
 
   @Override
   public boolean ndfs() {
-    worker.run();
-    return worker.getResult();
+    Thread[] threads = new Thread[this.numThreads];
+    for (int i = 0; i < this.numThreads; i++) {
+      threads[i] = new Thread(workers[i]);
+    }
+    for (Thread t : threads) {
+      t.start();
+    }
+    for (Thread t : threads) {
+      try {
+        t.join();
+      } catch (InterruptedException e) {
+        System.out.println("Error");
+      }
+    }
+
+    boolean result = false;
+    for (Worker w : workers) {
+      result = w.getResult();
+      if (result) break;
+    }
+    return result;
   }
 }
