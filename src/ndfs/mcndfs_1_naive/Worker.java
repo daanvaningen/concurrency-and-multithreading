@@ -42,9 +42,6 @@ public class Worker implements Runnable {
   }
 
   private void dfsRed(State s) throws CycleFoundException {
-    if (Thread.interupted()){
-      Thread.interupt()
-    }
     colors.setPink(s, true, this.threadNumber);
     for (State t : graph.post(s)) {
       if (colors.hasColor(t, Color.CYAN, this.threadNumber)) {
