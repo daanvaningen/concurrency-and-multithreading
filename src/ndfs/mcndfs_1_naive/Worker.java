@@ -21,7 +21,7 @@ public class Worker implements Runnable {
   private final Graph graph;
   private final Colors colors;
   private int threadNumber;
-  private volatile boolean result = false;
+  private boolean result = false;
   public volatile Lock lock;
 
   // Throwing an exception is a convenient way to cut off the search in case a
