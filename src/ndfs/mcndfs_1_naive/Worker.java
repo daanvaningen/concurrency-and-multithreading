@@ -68,7 +68,9 @@ public class Worker implements Runnable {
       }
     }
     if (s.isAccepting()) {
+      lock.lock();
       colors.changeCount(s, 1);
+      lock.unlock();
       dfsRed(s);
     }
     colors.color(s, Color.BLUE, this.threadNumber);
