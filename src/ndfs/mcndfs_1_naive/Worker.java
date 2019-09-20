@@ -19,7 +19,7 @@ public class Worker implements Runnable {
   private final Graph graph;
   private final Colors colors;
   private int threadNumber;
-  private volatile boolean result = false;
+  private boolean result = false;
 
   // Throwing an exception is a convenient way to cut off the search in case a
   // cycle is found.
@@ -69,6 +69,7 @@ public class Worker implements Runnable {
     }
     if (s.isAccepting()) {
       colors.changeCount(s, 1);
+
       dfsRed(s);
     }
     colors.color(s, Color.BLUE, this.threadNumber);
@@ -84,6 +85,7 @@ public class Worker implements Runnable {
       nndfs(graph.getInitialState());
     } catch (CycleFoundException e) {
       this.result = true;
+
     }
   }
 

@@ -14,7 +14,6 @@ public class NNDFS implements NDFS {
   private final Colors colors;
   private final File promelaFile;
   private int numThreads;
-
   /**
   * Constructs an NDFS object using the specified Promela file.
   *
@@ -43,6 +42,7 @@ public class NNDFS implements NDFS {
     for (Thread t : threads) {
       t.start();
     }
+
     for (Thread t : threads) {
       try {
         t.join();
