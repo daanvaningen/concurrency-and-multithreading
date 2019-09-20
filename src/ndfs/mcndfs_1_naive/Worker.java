@@ -84,6 +84,7 @@ public class Worker implements Runnable {
       nndfs(graph.getInitialState());
     } catch (CycleFoundException e) {
       this.result = true;
+      Thread.shutdownnow(); // make sure all threads stop once 1 cycle is found.
     }
   }
 
