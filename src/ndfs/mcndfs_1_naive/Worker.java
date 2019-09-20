@@ -42,6 +42,9 @@ public class Worker implements Runnable {
   }
 
   private void dfsRed(State s) throws CycleFoundException {
+    if (Thread.interupted()){
+      Thread.interupt()
+    }
     colors.setPink(s, true, this.threadNumber);
     for (State t : graph.post(s)) {
       if (colors.hasColor(t, Color.CYAN, this.threadNumber)) {
@@ -75,7 +78,12 @@ public class Worker implements Runnable {
   }
 
   private void nndfs(State s) throws CycleFoundException {
-    dfsBlue(s);
+    try {
+      dfsBlue(s);
+    } catch (InterruptedException e){
+      this.result = true;
+      println("Does this happen?");
+    }
   }
 
   @Override
