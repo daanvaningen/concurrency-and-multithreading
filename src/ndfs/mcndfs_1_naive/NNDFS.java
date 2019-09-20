@@ -44,7 +44,7 @@ public class NNDFS implements NDFS {
       t.start();
     }
 
-    println("Is this directly happening?");
+    System.out.println("Is this directly happening?");
 
     for (Thread t : threads) {
       try {
