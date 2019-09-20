@@ -3,6 +3,8 @@ package ndfs.mcndfs_1_naive;
 import java.io.File;
 import java.io.FileNotFoundException;
 
+import java.util.concurrent.locks.Lock;
+
 import graph.Graph;
 import graph.GraphFactory;
 import graph.State;
@@ -20,6 +22,7 @@ public class Worker implements Runnable {
   private final Colors colors;
   private int threadNumber;
   private volatile boolean result = false;
+  public volatile Lock lock;
 
   // Throwing an exception is a convenient way to cut off the search in case a
   // cycle is found.
@@ -35,10 +38,11 @@ public class Worker implements Runnable {
   * @throws FileNotFoundException
   *             is thrown in case the file could not be read.
   */
-  public Worker(File promelaFile, Colors colors, int threadNumber) throws FileNotFoundException {
+  public Worker(File promelaFile, Colors colors, int threadNumber, Lock lock) throws FileNotFoundException {
     this.threadNumber = threadNumber;
     this.graph = GraphFactory.createGraph(promelaFile);
     this.colors = colors;
+    this.lock = lock;
   }
 
   private void dfsRed(State s) throws CycleFoundException {
@@ -54,9 +58,12 @@ public class Worker implements Runnable {
     }
     if (s.isAccepting()) {
 
-      lock.lock(); // Acquire lock to change count
-      colors.changeCount(s, -1);
-      lock.unlock();
+      this.lock.lock();
+      try{
+        colors.changeCount(s, -1);
+      } finally{
+        this.lock.unlock();
+      }
 
       while (colors.getCount(s) != 0) {}
     }
@@ -73,9 +80,11 @@ public class Worker implements Runnable {
     }
     if (s.isAccepting()) {
 
-      lock.lock(); // Acquire lock to change counter.
-      colors.changeCount(s, 1);
-      lock.unlock();
+      this.lock.lock(); // Acquire lock to change counter.
+      try{
+        colors.changeCount(s, 1);
+      } finally{
+          this.lock.unlock();}
 
       dfsRed(s);
     }
