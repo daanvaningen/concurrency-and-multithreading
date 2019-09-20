@@ -11,7 +11,7 @@ import graph.State;
 public class Colors {
   // Store node information
   private final Map<State, Color[]> color = new HashMap<State, Color[]>();
-  private final Map<State, Integer> count = new HashMap<State, Integer>();
+  private volatile final Map<State, Integer> count = new HashMap<State, Integer>();
   private final Map<State, Boolean[]> pink = new HashMap<State, Boolean[]>();
   private volatile final Map<State, Boolean> red = new HashMap<State, Boolean>();
   private int numThreads;
