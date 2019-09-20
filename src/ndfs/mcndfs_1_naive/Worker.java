@@ -53,7 +53,11 @@ public class Worker implements Runnable {
       }
     }
     if (s.isAccepting()) {
+
+      lock.lock(); // Acquire lock to change count
       colors.changeCount(s, -1);
+      lock.unlock();
+
       while (colors.getCount(s) != 0) {}
     }
     colors.setRed(s);
@@ -68,9 +72,11 @@ public class Worker implements Runnable {
       }
     }
     if (s.isAccepting()) {
-      lock.lock();
+
+      lock.lock(); // Acquire lock to change counter.
       colors.changeCount(s, 1);
       lock.unlock();
+
       dfsRed(s);
     }
     colors.color(s, Color.BLUE, this.threadNumber);
