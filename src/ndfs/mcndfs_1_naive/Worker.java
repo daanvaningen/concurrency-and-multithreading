@@ -75,12 +75,7 @@ public class Worker implements Runnable {
   }
 
   private void nndfs(State s) throws CycleFoundException {
-    try {
-      dfsBlue(s);
-    } catch (InterruptedException e){
-      this.result = true;
-      println("Does this happen?");
-    }
+    dfsBlue(s);
   }
 
   @Override
@@ -89,9 +84,10 @@ public class Worker implements Runnable {
       nndfs(graph.getInitialState());
     } catch (CycleFoundException e) {
       this.result = true;
-      Thread.shutdownnow(); // make sure all threads stop once 1 cycle is found.
+      synchronized(this){
+        this.notify();
+      }
     }
-  }
 
   public boolean getResult() {
     return result;
