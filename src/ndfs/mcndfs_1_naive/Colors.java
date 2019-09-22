@@ -151,11 +151,14 @@ public class Colors {
     return this.result;
   }
 
-  public Void sleep(){
-    wait();
+  public void sleep(){
+    try{ wait();
+    } catch (InterruptedException e){
+      Thread.currentThread.interrupt()
+    }
   }
 
-  public Void wakeupcall(){
+  public void wakeupcall(){
     notifyAll();
   }
 }
