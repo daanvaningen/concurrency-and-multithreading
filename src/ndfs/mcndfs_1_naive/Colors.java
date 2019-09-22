@@ -151,7 +151,7 @@ public class Colors {
     return this.result;
   }
 
-  public void sleep(){
+  public void sleep() throws InterruptedException{
     synchronized(this){
       wait();
     }
