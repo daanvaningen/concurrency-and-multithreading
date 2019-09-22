@@ -2,7 +2,6 @@ package ndfs.mcndfs_1_naive;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.concurrent.locks.Lock;
 
 import ndfs.NDFS;
 
@@ -15,7 +14,6 @@ public class NNDFS implements NDFS {
   private final Colors colors;
   private final File promelaFile;
   private int numThreads;
-  public Lock lock;
   /**
   * Constructs an NDFS object using the specified Promela file.
   *
@@ -29,10 +27,9 @@ public class NNDFS implements NDFS {
     this.colors = new Colors(numThreads);
     this.promelaFile = promelaFile;
     this.numThreads = numThreads;
-    this.lock = new Lock();
 
     for (int i = 0; i < this.numThreads; i++) {
-      this.workers[i] = new Worker(this.promelaFile, this.colors, i, this.lock);
+      this.workers[i] = new Worker(this.promelaFile, this.colors, i);
     }
   }
 
