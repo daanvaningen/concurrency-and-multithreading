@@ -19,7 +19,6 @@ public class Worker implements Runnable {
   private final Graph graph;
   private final Colors colors;
   private int threadNumber;
-  private boolean result = false;
 
   // Throwing an exception is a convenient way to cut off the search in case a
   // cycle is found.
@@ -27,6 +26,9 @@ public class Worker implements Runnable {
     private static final long serialVersionUID = 1L;
   }
 
+  private static class InterruptedException extends Exception {
+    private static final long serialVersionUID = 1L;
+  }
   /**
   * Constructs a Worker object using the specified Promela file.
   *
@@ -41,7 +43,10 @@ public class Worker implements Runnable {
     this.colors = colors;
   }
 
-  private void dfsRed(State s) throws CycleFoundException {
+  private void dfsRed(State s) throws CycleFoundException, InterruptedException {
+    if (Thread.interrupted()){
+      throw new InterruptedException();
+    }
     colors.setPink(s, true, this.threadNumber);
     for (State t : graph.post(s)) {
       if (colors.hasColor(t, Color.CYAN, this.threadNumber)) {
@@ -60,7 +65,10 @@ public class Worker implements Runnable {
     colors.setPink(s, false, this.threadNumber);
   }
 
-  private void dfsBlue(State s) throws CycleFoundException {
+  private void dfsBlue(State s) throws CycleFoundException, InterruptedException{
+    if (Thread.interrupted()){
+      throw new InterruptedException();
+    }
     colors.color(s, Color.CYAN, this.threadNumber);
     for (State t : graph.post(s)) {
       if (colors.hasColor(t, Color.WHITE, this.threadNumber) && !colors.isRed(t)) {
@@ -69,13 +77,12 @@ public class Worker implements Runnable {
     }
     if (s.isAccepting()) {
       colors.changeCount(s, 1);
-
       dfsRed(s);
     }
     colors.color(s, Color.BLUE, this.threadNumber);
   }
 
-  private void nndfs(State s) throws CycleFoundException {
+  private void nndfs(State s) throws CycleFoundException, InterruptedException {
     dfsBlue(s);
   }
 
@@ -84,12 +91,9 @@ public class Worker implements Runnable {
     try {
       nndfs(graph.getInitialState());
     } catch (CycleFoundException e) {
-      this.result = true;
-
+      colors.setResult();
+    } catch (InterruptedException e){
+      System.out.println("Thread has been interrupted.");
     }
-  }
-
-  public boolean getResult() {
-    return result;
   }
 }

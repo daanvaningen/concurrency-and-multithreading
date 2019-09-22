@@ -3,7 +3,7 @@ package ndfs.mcndfs_1_naive;
 import java.util.HashMap;
 import java.util.Map;
 
-import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import graph.State;
 
@@ -17,7 +17,8 @@ public class Colors {
   private final Map<State, Boolean[]> pink = new HashMap<State, Boolean[]>();
   private volatile Map<State, Boolean> red = new HashMap<State, Boolean>();
   private int numThreads;
-  private Lock lock = new Lock();
+  private final ReentrantLock lock = new ReentrantLock();
+  private volatile boolean result = false;
 
   public Colors(int numThreads) {
     this.numThreads = numThreads;
@@ -80,12 +81,17 @@ public class Colors {
   * @param change amount to change the current count by
   */
   public synchronized void changeCount(State state, int change) {
-    Integer currentCount = this.count.get(state);
-    if (currentCount == null) {
-      currentCount = 0;
+    lock.lock();
+    try{
+      Integer currentCount = this.count.get(state);
+      if (currentCount == null) {
+        currentCount = 0;
+      }
+      currentCount += change;
+      this.count.put(state, currentCount);
+    } finally {
+      lock.unlock();
     }
-    currentCount += change;
-    this.count.put(state, currentCount);
   }
 
   /**
@@ -128,12 +134,34 @@ public class Colors {
   public synchronized Boolean isRed(State state) {
     Boolean current = this.red.get(state);
     if (current == null) {
-      this.red.put(state, false);
+      return false;
     }
-    return this.red.get(state);
+    return current;
   }
 
   public synchronized void setRed(State state) {
     this.red.put(state, true);
+  }
+
+  public synchronized void setResult(){
+    this.result = true;
+  }
+
+  public synchronized Boolean getResult(){
+    return this.result;
+  }
+
+  // not yet in use
+  public synchronized void sleep() throws InterruptedException{
+    synchronized(this){
+      wait();
+    }
+  }
+
+  // not yet in use
+  public synchronized void wakeupcall(){
+    synchronized(this){
+      notifyAll();
+    }
   }
 }

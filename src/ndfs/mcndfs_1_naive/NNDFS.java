@@ -51,11 +51,6 @@ public class NNDFS implements NDFS {
       }
     }
 
-    boolean result = false;
-    for (Worker w : workers) {
-      result = w.getResult();
-      if (result) break;
-    }
-    return result;
+    return this.colors.getResult();
   }
 }
