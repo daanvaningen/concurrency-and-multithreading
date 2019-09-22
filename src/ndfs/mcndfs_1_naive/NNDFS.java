@@ -44,10 +44,12 @@ public class NNDFS implements NDFS {
     }
 
     System.out.println("main() starts sleeping");
-    while (!this.colors.getResult()){
-      // wait
+    try {
+        Thread.sleep(10000);
+    } catch (InterruptedException e1) {
+        // ignore
     }
-
+    
     for (Thread t : threads) {
       try {
         t.join();
