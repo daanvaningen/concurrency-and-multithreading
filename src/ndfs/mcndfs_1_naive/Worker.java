@@ -27,6 +27,9 @@ public class Worker implements Runnable {
     private static final long serialVersionUID = 1L;
   }
 
+  private static class InterruptedException extends Exception {
+    private static final long serialVersionUID = 1L;
+  }
   /**
   * Constructs a Worker object using the specified Promela file.
   *
@@ -69,7 +72,6 @@ public class Worker implements Runnable {
     }
     if (s.isAccepting()) {
       colors.changeCount(s, 1);
-
       dfsRed(s);
     }
     colors.color(s, Color.BLUE, this.threadNumber);
