@@ -49,7 +49,11 @@ public class NNDFS implements NDFS {
     } catch (InterruptedException e1) {
         // ignore
     }
-    
+
+    for (Thread t : threads) {
+        t.interrupt();
+    }
+
     for (Thread t : threads) {
       try {
         t.join();
