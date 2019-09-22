@@ -154,7 +154,7 @@ public class Colors {
   public void sleep(){
     try{ wait();
     } catch (InterruptedException e){
-      Thread.currentThread.interrupt()
+      Thread.currentThread.interrupt();
     }
   }
 
