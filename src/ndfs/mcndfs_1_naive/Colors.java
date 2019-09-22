@@ -3,7 +3,7 @@ package ndfs.mcndfs_1_naive;
 import java.util.HashMap;
 import java.util.Map;
 
-import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import graph.State;
 
@@ -17,7 +17,7 @@ public class Colors {
   private final Map<State, Boolean[]> pink = new HashMap<State, Boolean[]>();
   private volatile Map<State, Boolean> red = new HashMap<State, Boolean>();
   private int numThreads;
-  private Lock lock = new Lock();
+  private final ReentrantLock lock = new ReentrantLock();
 
   public Colors(int numThreads) {
     this.numThreads = numThreads;
