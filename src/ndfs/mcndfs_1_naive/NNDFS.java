@@ -56,6 +56,6 @@ public class NNDFS implements NDFS {
       }
     }
 
-    return result;
+    return this.colors.getResult();
   }
 }
