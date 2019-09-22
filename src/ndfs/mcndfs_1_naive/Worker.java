@@ -3,8 +3,6 @@ package ndfs.mcndfs_1_naive;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-import java.util.concurrent.locks.Lock;
-
 import graph.Graph;
 import graph.GraphFactory;
 import graph.State;
@@ -87,9 +85,7 @@ public class Worker implements Runnable {
       nndfs(graph.getInitialState());
     } catch (CycleFoundException e) {
       this.result = true;
-      synchronized(this){
-        this.notify();
-      }
+
     }
   }
 
