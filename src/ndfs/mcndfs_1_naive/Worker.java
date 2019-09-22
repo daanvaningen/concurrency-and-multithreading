@@ -86,6 +86,7 @@ public class Worker implements Runnable {
       nndfs(graph.getInitialState());
     } catch (CycleFoundException e) {
       colors.setResult();
+      colors.wakeupcall();
     }
   }
 }

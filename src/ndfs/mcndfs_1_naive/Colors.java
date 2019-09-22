@@ -150,4 +150,12 @@ public class Colors {
   public Boolean getResult(){
     return this.result;
   }
+
+  public Void sleep(){
+    this.wait();
+  }
+
+  public Void wakeupcall(){
+    this.notifyall();
+  }
 }

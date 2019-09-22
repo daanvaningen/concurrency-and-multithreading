@@ -45,7 +45,7 @@ public class NNDFS implements NDFS {
 
     System.out.println("main() starts sleeping");
     try {
-        Thread.sleep(10000);
+        colors.sleep();
     } catch (InterruptedException e1) {
         // ignore
     }
