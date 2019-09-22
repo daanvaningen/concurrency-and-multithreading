@@ -152,10 +152,10 @@ public class Colors {
   }
 
   public Void sleep(){
-    this.wait();
+    wait();
   }
 
   public Void wakeupcall(){
-    this.notifyall();
+    notifyAll();
   }
 }
