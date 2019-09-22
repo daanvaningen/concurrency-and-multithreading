@@ -28,7 +28,6 @@ public class Worker implements Runnable {
 
   private static class InterruptedException extends Exception {
     private static final long serialVersionUID = 1L;
-      System.out.println("I am interupted!");
   }
   /**
   * Constructs a Worker object using the specified Promela file.
@@ -44,7 +43,10 @@ public class Worker implements Runnable {
     this.colors = colors;
   }
 
-  private void dfsRed(State s) throws CycleFoundException {
+  private void dfsRed(State s) throws CycleFoundException, InterruptedException {
+    if (Thread.interrupted()){
+      throw new InterruptedException();
+    }
     colors.setPink(s, true, this.threadNumber);
     for (State t : graph.post(s)) {
       if (colors.hasColor(t, Color.CYAN, this.threadNumber)) {
@@ -63,7 +65,7 @@ public class Worker implements Runnable {
     colors.setPink(s, false, this.threadNumber);
   }
 
-  private void dfsBlue(State s) throws CycleFoundException {
+  private void dfsBlue(State s) throws CycleFoundException, InterruptedException{
     colors.color(s, Color.CYAN, this.threadNumber);
     for (State t : graph.post(s)) {
       if (colors.hasColor(t, Color.WHITE, this.threadNumber) && !colors.isRed(t)) {
@@ -77,7 +79,7 @@ public class Worker implements Runnable {
     colors.color(s, Color.BLUE, this.threadNumber);
   }
 
-  private void nndfs(State s) throws CycleFoundException {
+  private void nndfs(State s) throws CycleFoundException, InterruptedException {
     dfsBlue(s);
   }
 
@@ -88,6 +90,8 @@ public class Worker implements Runnable {
     } catch (CycleFoundException e) {
       colors.setResult();
       colors.wakeupcall();
+    } catch (InterruptedException e){
+      //ignore
     }
   }
 }
