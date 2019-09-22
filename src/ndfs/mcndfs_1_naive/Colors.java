@@ -80,12 +80,17 @@ public class Colors {
   * @param change amount to change the current count by
   */
   public synchronized void changeCount(State state, int change) {
-    Integer currentCount = this.count.get(state);
-    if (currentCount == null) {
-      currentCount = 0;
+    lock.lock();
+    try{
+      Integer currentCount = this.count.get(state);
+      if (currentCount == null) {
+        currentCount = 0;
+      }
+      currentCount += change;
+      this.count.put(state, currentCount);
+    } finally {
+      lock.unlock();
     }
-    currentCount += change;
-    this.count.put(state, currentCount);
   }
 
   /**
