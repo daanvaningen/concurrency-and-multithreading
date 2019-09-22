@@ -152,13 +152,14 @@ public class Colors {
   }
 
   public void sleep(){
-    try{ wait();
-    } catch (InterruptedException e){
-      Thread.currentThread().interrupt();
+    synchronized(this){
+      wait();
     }
   }
 
   public void wakeupcall(){
-    notifyAll();
+    synchronized(this){
+      notifyAll();
+    }
   }
 }
