@@ -43,12 +43,6 @@ public class NNDFS implements NDFS {
       t.start();
     }
 
-    synchronized(this){
-      this.wait();
-    }
-    for (Thread t: threads) {
-      t.interrupt();
-    }
     for (Thread t : threads) {
       try {
         t.join();
