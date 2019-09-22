@@ -16,7 +16,7 @@ public class Colors {
   private final Map<State, Boolean> red = new HashMap<State, Boolean>();
   private int numThreads;
 
-  public synchronized Colors(int numThreads) {
+  public Colors(int numThreads) {
     this.numThreads = numThreads;
   }
   /**
