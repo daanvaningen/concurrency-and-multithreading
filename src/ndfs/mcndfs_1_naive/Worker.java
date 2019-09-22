@@ -90,10 +90,8 @@ public class Worker implements Runnable {
   public void run() {
     try {
       nndfs(graph.getInitialState());
-      colors.wakeupcall();
     } catch (CycleFoundException e) {
       colors.setResult();
-      colors.wakeupcall();
     } catch (InterruptedException e){
       System.out.println("Thread has been interrupted.");
     }
