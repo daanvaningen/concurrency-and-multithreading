@@ -105,6 +105,7 @@ public class Worker implements Runnable {
         this.notify();
       }
     }
+  }
 
   public boolean getResult() {
     return result;
