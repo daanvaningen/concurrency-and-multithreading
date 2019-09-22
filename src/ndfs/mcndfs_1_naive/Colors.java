@@ -153,7 +153,7 @@ public class Colors {
 
   public void sleep() throws InterruptedException{
     synchronized(this){
-      wait();
+      wait(10000);
     }
   }
 
