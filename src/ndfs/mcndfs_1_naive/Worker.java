@@ -28,6 +28,7 @@ public class Worker implements Runnable {
 
   private static class InterruptedException extends Exception {
     private static final long serialVersionUID = 1L;
+      System.out.println("I am interupted!");
   }
   /**
   * Constructs a Worker object using the specified Promela file.
