@@ -3,7 +3,7 @@ package ndfs.mcndfs_1_naive;
 import java.util.HashMap;
 import java.util.Map;
 
-import java.util.concurrent.locks;
+import java.util.concurrent.locks.Lock;
 
 import graph.State;
 
