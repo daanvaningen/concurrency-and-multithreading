@@ -43,6 +43,11 @@ public class NNDFS implements NDFS {
       t.start();
     }
 
+    System.out.println("main() starts sleeping");
+    while (!this.colors.getResult()){
+      // wait
+    }
+
     for (Thread t : threads) {
       try {
         t.join();
@@ -51,11 +56,6 @@ public class NNDFS implements NDFS {
       }
     }
 
-    boolean result = false;
-    for (Worker w : workers) {
-      result = w.getResult();
-      if (result) break;
-    }
     return result;
   }
 }

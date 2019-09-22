@@ -18,6 +18,7 @@ public class Colors {
   private volatile Map<State, Boolean> red = new HashMap<State, Boolean>();
   private int numThreads;
   private final ReentrantLock lock = new ReentrantLock();
+  private volatile boolean result = false;
 
   public Colors(int numThreads) {
     this.numThreads = numThreads;
@@ -140,5 +141,13 @@ public class Colors {
 
   public void setRed(State state) {
     this.red.put(state, true);
+  }
+
+  public void setResult(){
+    this.result = true;
+  }
+
+  public Boolean getResult(){
+    return this.result;
   }
 }
