@@ -135,7 +135,7 @@ public class Colors {
     if (current == null) {
       return false;
     }
-    return this.red.get(state);
+    return current;
   }
 
   public void setRed(State state) {
