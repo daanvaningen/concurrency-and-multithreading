@@ -133,7 +133,7 @@ public class Colors {
   public Boolean isRed(State state) {
     Boolean current = this.red.get(state);
     if (current == null) {
-      this.red.put(state, false);
+      return false;
     }
     return this.red.get(state);
   }
