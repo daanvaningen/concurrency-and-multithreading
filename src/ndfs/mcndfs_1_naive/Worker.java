@@ -91,7 +91,7 @@ public class Worker implements Runnable {
       colors.setResult();
       colors.wakeupcall();
     } catch (InterruptedException e){
-      //ignore
+      System.out.println("Thread has been interrupted.");
     }
   }
 }
