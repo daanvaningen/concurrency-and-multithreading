@@ -16,6 +16,7 @@ public class Colors {
   private volatile Map<State, Integer> count = new HashMap<State, Integer>();
   private final Map<State, boolean[]> pink = new HashMap<State, boolean[]>();
   private volatile Map<State, Boolean> red = new HashMap<State, Boolean>();
+
   private int numThreads;
   private final ReentrantLock lock = new ReentrantLock();
   private volatile boolean result = false;
@@ -33,7 +34,7 @@ public class Colors {
   *            the color
   * @return whether the specified state has the specified color.
   */
-  public synchronized boolean hasColor(State state, Color color, int threadNumber) {
+  public boolean hasColor(State state, Color color, int threadNumber) {
     Color[] current = this.color.get(state);
     if (current == null) { // initialise
       Color[] initColor = new Color[numThreads];
@@ -57,7 +58,7 @@ public class Colors {
   * @param color
   *            color to give to the state.
   */
-  public synchronized void color(State state, Color color, int threadNumber) {
+  public void color(State state, Color color, int threadNumber) {
     Color[] current = this.color.get(state);
     if (current == null) { // initialise
       Color[] initColor = new Color[numThreads];
@@ -91,6 +92,7 @@ public class Colors {
       this.count.put(state, currentCount);
     } finally {
       lock.unlock();
+
     }
   }
 
@@ -99,7 +101,7 @@ public class Colors {
   *
   * @param state state of which to get the count
   */
-  public synchronized int getCount(State state) {
+  public int getCount(State state) {
     return this.count.get(state);
   }
 
@@ -125,6 +127,7 @@ public class Colors {
   /**
    * Check whether the current state is pink for this thread
    */
+
   public synchronized boolean isPink(State state, int threadNumber) {
     boolean[] current = this.pink.get(state);
     if (current == null) {
@@ -134,7 +137,7 @@ public class Colors {
       }
       this.pink.put(state, initPink);
     }
-
+ 
     return this.pink.get(state)[threadNumber];
   }
 
@@ -143,7 +146,7 @@ public class Colors {
   *
   * @param state the state to check
   */
-  public synchronized Boolean isRed(State state) {
+  public Boolean isRed(State state) {
     Boolean current = this.red.get(state);
     if (current == null) {
       return false;
@@ -151,7 +154,7 @@ public class Colors {
     return current;
   }
 
-  public synchronized void setRed(State state) {
+  public void setRed(State state) {
     this.red.put(state, true);
   }
 
