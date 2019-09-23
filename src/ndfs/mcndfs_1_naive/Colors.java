@@ -14,7 +14,7 @@ public class Colors {
   // Store node information
   private final Map<State, Color[]> color = new HashMap<State, Color[]>();
   private volatile Map<State, Integer> count = new HashMap<State, Integer>();
-  private final Map<State, Boolean[]> pink = new HashMap<State, Boolean[]>();
+  private final Map<State, boolean[]> pink = new HashMap<State, boolean[]>();
   private volatile Map<State, Boolean> red = new HashMap<State, Boolean>();
   private int numThreads;
   private final ReentrantLock lock = new ReentrantLock();
@@ -110,9 +110,12 @@ public class Colors {
   * @param change amount to change the current count by
   */
   public synchronized void setPink(State state, boolean isPink, int threadNumber) {
-    Boolean[] current = this.pink.get(state);
+    boolean[] current = this.pink.get(state);
     if (current == null) {
-      Boolean[] initPink = new Boolean[this.numThreads];
+      boolean[] initPink = new boolean[this.numThreads];
+      for (int i = 0; i < threadNumber; i++) {
+        initPink[i] = false;
+      }
       current = initPink;
     }
     current[threadNumber] = isPink;
@@ -122,7 +125,16 @@ public class Colors {
   /**
    * Check whether the current state is pink for this thread
    */
-  public synchronized Boolean isPink(State state, int threadNumber) {
+  public synchronized boolean isPink(State state, int threadNumber) {
+    boolean[] current = this.pink.get(state);
+    if (current == null) {
+      boolean[] initPink = new boolean[this.numThreads];
+      for (int i = 0; i < threadNumber; i++) {
+        initPink[i] = false;
+      }
+      this.pink.put(state, initPink);
+    }
+
     return this.pink.get(state)[threadNumber];
   }
 
