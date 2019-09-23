@@ -151,12 +151,14 @@ public class Colors {
     return this.result;
   }
 
+  // not yet in use
   public synchronized void sleep() throws InterruptedException{
     synchronized(this){
       wait();
     }
   }
 
+  // not yet in use
   public synchronized void wakeupcall(){
     synchronized(this){
       notifyAll();
