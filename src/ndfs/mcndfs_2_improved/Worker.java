@@ -66,6 +66,9 @@ public class Worker implements Callable<Void> {
       }
     }
     if (s.isAccepting()) {
+      if (Thread.interrupted()){
+        throw new InterruptedException();
+      }
       sharedData.changeCount(s, -1);
       while (sharedData.getCount(s) != 0) {}
     }
