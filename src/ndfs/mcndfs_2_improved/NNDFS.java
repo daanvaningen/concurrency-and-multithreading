@@ -60,7 +60,7 @@ public class NNDFS implements NDFS {
     for (int i = 0; i < this.numThreads; i++) {
       if (this.workers[i].result) return true;
     }
-    return false
+    return false;
   }
 
   public boolean checkWorkers () {
