@@ -14,8 +14,14 @@ public class Colors {
   // Store node information
   private final Map<State, Color[]> color = new HashMap<State, Color[]>();
   private volatile Map<State, Integer> count = new HashMap<State, Integer>();
+<<<<<<< HEAD
   private final Map<State, Boolean[]> pink = new HashMap<State, Boolean[]>();
   private volatile Map<State, Boolean> red = new HashMap<State, Boolean>();
+=======
+  private final Map<State, boolean[]> pink = new HashMap<State, boolean[]>();
+  private volatile Map<State, Boolean> red = new HashMap<State, Boolean>();
+
+>>>>>>> a7e7621ed86ced01a109bb8e96d4568606703aa9
   private int numThreads;
   private final ReentrantLock lock = new ReentrantLock();
   private volatile boolean result = false;
@@ -91,6 +97,10 @@ public class Colors {
       this.count.put(state, currentCount);
     } finally {
       lock.unlock();
+<<<<<<< HEAD
+=======
+
+>>>>>>> a7e7621ed86ced01a109bb8e96d4568606703aa9
     }
   }
 
@@ -110,9 +120,16 @@ public class Colors {
   * @param change amount to change the current count by
   */
   public synchronized void setPink(State state, boolean isPink, int threadNumber) {
+<<<<<<< HEAD
     Boolean[] current = this.pink.get(state);
+=======
+    boolean[] current = this.pink.get(state);
+>>>>>>> a7e7621ed86ced01a109bb8e96d4568606703aa9
     if (current == null) {
-      Boolean[] initPink = new Boolean[this.numThreads];
+      boolean[] initPink = new boolean[this.numThreads];
+      for (int i = 0; i < threadNumber; i++) {
+        initPink[i] = false;
+      }
       current = initPink;
     }
     current[threadNumber] = isPink;
@@ -122,7 +139,21 @@ public class Colors {
   /**
    * Check whether the current state is pink for this thread
    */
+<<<<<<< HEAD
   public synchronized Boolean isPink(State state, int threadNumber) {
+=======
+
+  public synchronized boolean isPink(State state, int threadNumber) {
+    boolean[] current = this.pink.get(state);
+    if (current == null) {
+      boolean[] initPink = new boolean[this.numThreads];
+      for (int i = 0; i < threadNumber; i++) {
+        initPink[i] = false;
+      }
+      this.pink.put(state, initPink);
+    }
+ 
+>>>>>>> a7e7621ed86ced01a109bb8e96d4568606703aa9
     return this.pink.get(state)[threadNumber];
   }
 
