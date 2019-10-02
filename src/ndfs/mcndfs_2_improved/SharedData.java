@@ -14,21 +14,18 @@ public class SharedData {
   public void setRed (State state) {
     synchronized(state){
       this.red.put(state, true);
-    }    
+    }
   }
 
   public Boolean getRed (State state) {
     Boolean s = false;
-    Redlock.lock();
-    try {
+    synchronized(state){
+
       s = this.red.get(state);
       if (s == null) s = false;
-    } catch (Exception e) {
-      System.out.println("getRed Error");
-    } finally {
-      Redlock.unlock();
-    }
 
+    }
+    
     return s;
   }
 
