@@ -33,8 +33,7 @@ public class SharedData {
       // System.out.println("Unlock getRed");
       Lock.unlock();
     }
-    System.out.println("getRed");
-    System.out.println(s);
+
     return s;
   }
 
