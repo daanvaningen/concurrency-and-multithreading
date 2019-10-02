@@ -22,12 +22,13 @@ public class SharedData {
       s = this.red.get(state);
       if (s == null) s = false;
     }
-    
+
     return s;
   }
 
   public void changeCount (State state, int amount) {
     Counterlock.lock();
+    System.out.println("Lock is acquired");
     try {
       Integer currentCount = this.count.get(state);
       if (currentCount == null) {
@@ -37,6 +38,7 @@ public class SharedData {
       }
         this.count.put(state, currentCount);
     } finally {
+      System.out.println("lock is released");
       Counterlock.unlock();
     }
   }
