@@ -50,7 +50,12 @@ public class Worker implements Callable<Void> {
       throw new InterruptedException();
     }
     colors.setPink(s, true);
-    for (State t :graph.post(s)) {
+
+    // Shuffle the post list of s
+    List<State> postRed = graph.post(s);
+    Collections.shuffle(post);
+
+    for (State t : postRed) {
       if (colors.hasColor(t, Color.CYAN)) {
         System.out.println("Cycle Found");
         throw new CycleFoundException();
@@ -73,8 +78,11 @@ public class Worker implements Callable<Void> {
       throw new InterruptedException();
     }
     colors.color(s, Color.CYAN);
+
+    // Shuffle the post list of s
     List<State> post = graph.post(s);
     Collections.shuffle(post);
+
     for (State t : post) {
       if (colors.hasColor(t, Color.WHITE) && !sharedData.getRed(t)) {
         dfsBlue(t);
