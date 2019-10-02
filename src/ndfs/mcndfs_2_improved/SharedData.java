@@ -12,12 +12,9 @@ public class SharedData {
   private final ReentrantLock Redlock = new ReentrantLock();
 
   public void setRed (State state) {
-    Redlock.lock();
-    try {
+    synchronized(state){
       this.red.put(state, true);
-    } finally {
-      Redlock.unlock();
-    }
+    }    
   }
 
   public Boolean getRed (State state) {
