@@ -23,8 +23,10 @@ public class Colors {
   *            the color
   * @return whether the specified state has the specified color.
   */
-  public boolean hasColor(State state, Color color) {
-
+  public boolean hasColor(State state, Color color) throws InterruptedException {
+    if (Thread.interrupted()){
+      throw new InterruptedException();
+    }
     // The initial color is white, and is not explicitly represented.
     if (color == Color.WHITE) {
       return map.get(state) == null;
