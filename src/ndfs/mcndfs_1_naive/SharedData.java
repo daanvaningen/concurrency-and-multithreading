@@ -11,7 +11,6 @@ public class SharedData {
   private final ReentrantLock Lock = new ReentrantLock();
 
   public void setRed (State state) {
-    // System.out.println("setRed");
     Lock.lock();
     try {
       this.red.put(state, true);
@@ -23,14 +22,12 @@ public class SharedData {
   public Boolean getRed (State state) {
     Boolean s = false;
     Lock.lock();
-    // System.out.println("getRed");
     try {
       s = this.red.get(state);
       if (s == null) s = false;
     } catch (Exception e) {
       System.out.println("getRed Error");
     } finally {
-      // System.out.println("Unlock getRed");
       Lock.unlock();
     }
 
@@ -55,14 +52,6 @@ public class SharedData {
   }
 
   public Integer getCount (State state) {
-    // Lock.lock();
-    // try {
-    //   Integer currentCount = this.count.get(state);
-    //   if (currentCount == null) return 0;
-    //   return currentCount;
-    // } finally {
-    //   Lock.unlock();
-    // }
     Integer currentCount = this.count.get(state);
     if (currentCount == null) return 0;
     return currentCount;

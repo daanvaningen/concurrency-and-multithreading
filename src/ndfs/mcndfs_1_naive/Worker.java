@@ -69,6 +69,7 @@ public class Worker implements Callable<Void> {
   }
 
   private void dfsBlue(State s) throws CycleFoundException, InterruptedException {
+    System.out.println("blue");
     if (Thread.interrupted()){
       throw new InterruptedException();
     }
