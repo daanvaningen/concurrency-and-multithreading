@@ -53,7 +53,7 @@ public class Worker implements Callable<Void> {
 
     // Shuffle the post list of s
     List<State> postRed = graph.post(s);
-    //Collections.shuffle(postRed);
+    Collections.shuffle(postRed);
 
     for (State t : postRed) {
       if (colors.hasColor(t, Color.CYAN)) {
