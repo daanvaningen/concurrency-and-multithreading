@@ -73,7 +73,7 @@ public class Worker implements Callable<Void> {
       throw new InterruptedException();
     }
     colors.color(s, Color.CYAN);
-    State[] post = graph.post(s);
+    List<State> post = graph.post(s);
     Collections.shuffle(post);
     for (State t : post) {
       if (colors.hasColor(t, Color.WHITE) && !sharedData.getRed(t)) {
