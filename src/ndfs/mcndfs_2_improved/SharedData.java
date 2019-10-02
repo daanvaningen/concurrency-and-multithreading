@@ -36,11 +36,9 @@ public class SharedData {
         currentCount = new Integer(currentCount + amount);
       }
         this.count.put(state, currentCount);
-      } catch (Exception e) {
-        System.out.println("exception");
-      } finally {
-        Counterlock.unlock();
-      }
+    } finally {
+      Counterlock.unlock();
+    }
   }
 
   public Integer getCount (State state) {
