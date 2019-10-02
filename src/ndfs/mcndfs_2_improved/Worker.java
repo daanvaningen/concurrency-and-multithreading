@@ -107,7 +107,6 @@ public class Worker implements Callable<Void> {
     try {
       nndfs(graph.getInitialState());
       this.done = true;
-      wait();
     } catch (CycleFoundException e) {
       this.result = true;
     } catch (InterruptedException e){
