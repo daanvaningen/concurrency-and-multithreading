@@ -66,7 +66,7 @@ public class Worker implements Callable<Void> {
       while (sharedData.getCount(s) != 0) {}
     }
     sharedData.setRed(s);
-    colors.color(s, Color.PINK);
+    colors.color(s, Color.WHITE);
   }
 
   private void dfsBlue(State s) throws CycleFoundException, InterruptedException {
