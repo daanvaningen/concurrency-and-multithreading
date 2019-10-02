@@ -3,3 +3,10 @@
 
 # run (accept-cycle file, 1_naive version, 1 core)
 ./bin/ndfs.sh input/accept-cycle.prom 1_naive 1
+
+
+Notes:
+
+BENCH-DEEP.sumo
+  Shuffled blue en red: beste tijd uit 3 was 12000ms
+  Shuffled alleen blue: beste tijd uit 3 was 
