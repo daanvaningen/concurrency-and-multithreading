@@ -49,9 +49,9 @@ public class NNDFS implements NDFS {
 
     while(!this.checkWorkers());
 
+    pool.shutdownNow();
+    
     for (int i = 0; i < this.numThreads; i++) {
-
-      this.workers[i].Stop();
       if (this.workers[i].result) return true;
     }
     return false;

@@ -103,11 +103,6 @@ public class Worker implements Callable<Void> {
   }
 
   @Override
-  public Void Stop() {
-    private static final long serialVersionUID = 1L;
-  }
-
-  @Override
   public Void call() {
     try {
       nndfs(graph.getInitialState());
