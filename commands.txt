@@ -9,4 +9,4 @@ Notes:
 
 BENCH-DEEP.sumo
   Shuffled blue en red: beste tijd uit 3 was 12000ms
-  Shuffled alleen blue: beste tijd uit 3 was 
+  Shuffled alleen blue: beste tijd uit 3 was 12112ms
