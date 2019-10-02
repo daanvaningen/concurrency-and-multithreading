@@ -45,12 +45,15 @@ public class Worker implements Callable<Void> {
   }
 
   private void dfsRed(State s) throws CycleFoundException, InterruptedException {
+    System.out.println("red");
     if (Thread.interrupted()){
       throw new InterruptedException();
     }
     colors.color(s, Color.PINK);
     for (State t : graph.post(s)) {
+      System.out.println(colors.hasColor(t, Color.CYAN));
       if (colors.hasColor(t, Color.CYAN)) {
+        System.out.println("Cycle Found");
         throw new CycleFoundException();
       }
       if (!colors.hasColor(t, Color.PINK)
@@ -66,7 +69,7 @@ public class Worker implements Callable<Void> {
     colors.color(s, Color.PINK);
   }
 
-  private void dfsBlue(State s) throws CycleFoundException, InterruptedException{
+  private void dfsBlue(State s) throws CycleFoundException, InterruptedException {
     if (Thread.interrupted()){
       throw new InterruptedException();
     }
@@ -78,6 +81,7 @@ public class Worker implements Callable<Void> {
     }
     if (s.isAccepting()) {
       sharedData.changeCount(s, 1);
+
       dfsRed(s);
     }
     colors.color(s, Color.BLUE);
@@ -95,6 +99,7 @@ public class Worker implements Callable<Void> {
       nndfs(graph.getInitialState());
       this.done = true;
     } catch (CycleFoundException e) {
+      System.out.println("CycleFoundException call");
       this.result = true;
     } catch (InterruptedException e){
       System.out.println("Thread has been interrupted.");

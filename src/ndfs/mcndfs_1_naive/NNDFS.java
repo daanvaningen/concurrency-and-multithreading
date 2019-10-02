@@ -47,8 +47,6 @@ public class NNDFS implements NDFS {
       ecs.submit(w);
     }
 
-    System.out.println("Started threads, main sleeps");
-
     while(!this.checkWorkers());
 
     pool.shutdownNow();
