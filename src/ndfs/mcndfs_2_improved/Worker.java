@@ -103,8 +103,8 @@ public class Worker implements Callable<Void> {
   }
 
   @Override
-  public Void Stop() throws InterruptedException {
-    throw new InterruptedException();
+  public Void Stop() {
+    private static final long serialVersionUID = 1L;
   }
 
   @Override
