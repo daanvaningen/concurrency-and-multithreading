@@ -7,6 +7,7 @@ import graph.Graph;
 import graph.GraphFactory;
 import graph.State;
 
+import java.util.Collections;
 import java.util.concurrent.Callable;
 
 /**
@@ -49,7 +50,7 @@ public class Worker implements Callable<Void> {
       throw new InterruptedException();
     }
     colors.setPink(s, true);
-    for (State t : graph.post(s)) {
+    for (State t : Collections.shuffle(graph.post(s))) {
       if (colors.hasColor(t, Color.CYAN)) {
         System.out.println("Cycle Found");
         throw new CycleFoundException();
@@ -72,7 +73,7 @@ public class Worker implements Callable<Void> {
       throw new InterruptedException();
     }
     colors.color(s, Color.CYAN);
-    for (State t : graph.post(s)) {
+    for (State t : Collections.shuffle(graph.post(s))) {
       if (colors.hasColor(t, Color.WHITE) && !sharedData.getRed(t)) {
         dfsBlue(t);
       }
@@ -96,7 +97,6 @@ public class Worker implements Callable<Void> {
       nndfs(graph.getInitialState());
       this.done = true;
     } catch (CycleFoundException e) {
-      System.out.println("CycleFoundException call");
       this.result = true;
     } catch (InterruptedException e){
       System.out.println("Thread has been interrupted.");
