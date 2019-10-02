@@ -50,10 +50,17 @@ public class NNDFS implements NDFS {
     while(!this.checkWorkers());
 
     pool.shutdownNow();
+    try {
+        // Wait for the pool to actually terminate.
+        pool.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
+    } catch (InterruptedException e) {
+        // ignore
+    }
+
     for (int i = 0; i < this.numThreads; i++) {
       if (this.workers[i].result) return true;
     }
-    return false;
+    return false
   }
 
   public boolean checkWorkers () {
