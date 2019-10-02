@@ -46,9 +46,6 @@ public class Worker implements Callable<Void> {
   }
 
   private void dfsRed(State s) throws CycleFoundException, InterruptedException {
-    if (Thread.interrupted()){
-      throw new InterruptedException();
-    }
     colors.setPink(s, true);
 
     // Shuffle the post list of s
@@ -56,6 +53,9 @@ public class Worker implements Callable<Void> {
     Collections.shuffle(postRed);
 
     for (State t : postRed) {
+      if (Thread.interrupted()){
+        throw new InterruptedException();
+      }
       if (colors.hasColor(t, Color.CYAN)) {
         System.out.println("Cycle Found");
         throw new CycleFoundException();
@@ -74,9 +74,6 @@ public class Worker implements Callable<Void> {
   }
 
   private void dfsBlue(State s) throws CycleFoundException, InterruptedException {
-    if (Thread.interrupted()){
-      throw new InterruptedException();
-    }
     colors.color(s, Color.CYAN);
 
     // Shuffle the post list of s
@@ -84,6 +81,10 @@ public class Worker implements Callable<Void> {
     Collections.shuffle(post);
 
     for (State t : post) {
+      if (Thread.interrupted()){
+        throw new InterruptedException();
+      }
+
       if (colors.hasColor(t, Color.WHITE) && !sharedData.getRed(t)) {
         dfsBlue(t);
       }
