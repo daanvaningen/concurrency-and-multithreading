@@ -2,7 +2,11 @@ package ndfs.mcndfs_1_naive;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-
+import java.util.concurrent.CompletionService;
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import ndfs.NDFS;
 
 /**
@@ -11,9 +15,9 @@ import ndfs.NDFS;
 */
 public class NNDFS implements NDFS {
   private final Worker[] workers;
-  private final Colors colors;
   private final File promelaFile;
   private int numThreads;
+  private SharedData sharedData;
   /**
   * Constructs an NDFS object using the specified Promela file.
   *
@@ -24,33 +28,42 @@ public class NNDFS implements NDFS {
   */
   public NNDFS(File promelaFile, int numThreads) throws FileNotFoundException {
     this.workers = new Worker[numThreads];
-    this.colors = new Colors(numThreads);
     this.promelaFile = promelaFile;
     this.numThreads = numThreads;
+    this.sharedData = new SharedData();
 
     for (int i = 0; i < this.numThreads; i++) {
-      this.workers[i] = new Worker(this.promelaFile, this.colors, i);
+      this.workers[i] = new Worker(this.promelaFile, this.sharedData);
     }
   }
 
   @Override
   public boolean ndfs() {
-    Thread[] threads = new Thread[this.numThreads];
+    ExecutorService pool = Executors.newFixedThreadPool(this.numThreads);
+
+    CompletionService<Void> ecs = new ExecutorCompletionService<Void>(pool);
+
+    for (Worker w : this.workers) {
+      ecs.submit(w);
+    }
+
+    System.out.println("Started threads, main sleeps");
+
+    while(!this.checkWorkers());
+
+    pool.shutdownNow();
     for (int i = 0; i < this.numThreads; i++) {
-      threads[i] = new Thread(workers[i]);
+      if (this.workers[i].result) return true;
     }
-    for (Thread t : threads) {
-      t.start();
-    }
+    return false;
+  }
 
-    for (Thread t : threads) {
-      try {
-        t.join();
-      } catch (InterruptedException e) {
-        System.out.println("Error");
-      }
+  public boolean checkWorkers () {
+    boolean allDone = true;
+    for (int i = 0; i < this.numThreads; i++) {
+      if (this.workers[i].result) return true;
+      if (allDone && !this.workers[i].done) allDone = false;
     }
-
-    return this.colors.getResult();
+    return allDone;
   }
 }

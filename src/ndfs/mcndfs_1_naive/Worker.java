@@ -14,11 +14,13 @@ import java.util.concurrent.Callable;
 * <a href="http://www.cs.vu.nl/~tcs/cm/ndfs/laarman.pdf"> "the Laarman
 * paper"</a>.
 */
-public class Worker implements Runnable {
+public class Worker implements Callable<Void> {
 
   private final Graph graph;
-  private final Colors colors;
-  private int threadNumber;
+  private final Colors colors = new Colors();
+  private SharedData sharedData;
+  public boolean done = false;
+  public boolean result = false;
 
   // Throwing an exception is a convenient way to cut off the search in case a
   // cycle is found.
@@ -37,63 +39,67 @@ public class Worker implements Runnable {
   * @throws FileNotFoundException
   *             is thrown in case the file could not be read.
   */
-  public Worker(File promelaFile, Colors colors, int threadNumber) throws FileNotFoundException {
-    this.threadNumber = threadNumber;
+  public Worker(File promelaFile, SharedData sharedData) throws FileNotFoundException {
     this.graph = GraphFactory.createGraph(promelaFile);
-    this.colors = colors;
+    this.sharedData = sharedData;
   }
 
   private void dfsRed(State s) throws CycleFoundException, InterruptedException {
     if (Thread.interrupted()){
       throw new InterruptedException();
     }
-    colors.setPink(s, true, this.threadNumber);
+    colors.color(s, Color.PINK);
     for (State t : graph.post(s)) {
-      if (colors.hasColor(t, Color.CYAN, this.threadNumber)) {
+      if (colors.hasColor(t, Color.CYAN)) {
         throw new CycleFoundException();
       }
-      if (!colors.isPink(t, this.threadNumber)
-          && !colors.isRed(t)) {
+      if (!colors.hasColor(t, Color.PINK)
+          && !sharedData.getRed(t)) {
         dfsRed(t);
       }
     }
     if (s.isAccepting()) {
-      colors.changeCount(s, -1);
-      while (colors.getCount(s) != 0) {}
+      sharedData.changeCount(s, -1);
+      while (sharedData.getCount(s) != 0) {}
     }
-    colors.setRed(s);
-    colors.setPink(s, false, this.threadNumber);
+    sharedData.setRed(s);
+    colors.color(s, Color.PINK);
   }
 
   private void dfsBlue(State s) throws CycleFoundException, InterruptedException{
     if (Thread.interrupted()){
       throw new InterruptedException();
     }
-    colors.color(s, Color.CYAN, this.threadNumber);
+    colors.color(s, Color.CYAN);
     for (State t : graph.post(s)) {
-      if (colors.hasColor(t, Color.WHITE, this.threadNumber) && !colors.isRed(t)) {
+      if (colors.hasColor(t, Color.WHITE) && !sharedData.getRed(t)) {
         dfsBlue(t);
       }
     }
     if (s.isAccepting()) {
-      colors.changeCount(s, 1);
+      sharedData.changeCount(s, 1);
       dfsRed(s);
     }
-    colors.color(s, Color.BLUE, this.threadNumber);
+    colors.color(s, Color.BLUE);
   }
+
+
 
   private void nndfs(State s) throws CycleFoundException, InterruptedException {
     dfsBlue(s);
   }
 
   @Override
-  public void run() {
+  public Void call() {
     try {
       nndfs(graph.getInitialState());
+      this.done = true;
     } catch (CycleFoundException e) {
-      colors.setResult();
+      this.result = true;
     } catch (InterruptedException e){
       System.out.println("Thread has been interrupted.");
     }
+
+    return null;
   }
 }
