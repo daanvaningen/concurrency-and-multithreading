@@ -9,7 +9,6 @@ public class SharedData {
   private volatile Map<State, Boolean> red = new HashMap<State, Boolean>();
   private volatile Map<State, Integer> count = new HashMap<State, Integer>();
   private final ReentrantLock Counterlock = new ReentrantLock();
-  private final ReentrantLock Redlock = new ReentrantLock();
 
   public void setRed (State state) {
     synchronized(state){
@@ -28,14 +27,19 @@ public class SharedData {
   }
 
   public void changeCount (State state, int amount) {
-      synchronized(state){
-        Integer currentCount = this.count.get(state);
-        if (currentCount == null) {
-          currentCount = new Integer(amount);
-        } else {
-          currentCount = new Integer(currentCount + amount);
-        }
+    Counterlock.lock();
+    try {
+      Integer currentCount = this.count.get(state);
+      if (currentCount == null) {
+        currentCount = new Integer(amount);
+      } else {
+        currentCount = new Integer(currentCount + amount);
+      }
         this.count.put(state, currentCount);
+      } catch (Exception e) {
+        System.out.println("exception");
+      } finally {
+        Counterlock.unlock();
       }
   }
 
