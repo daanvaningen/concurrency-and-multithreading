@@ -9,7 +9,7 @@ import graph.State;
 
 import java.util.Collections;
 import java.util.concurrent.Callable;
-import java.util;
+import java.util.*;
 /**
 * This is a straightforward implementation of Figure 1 of
 * <a href="http://www.cs.vu.nl/~tcs/cm/ndfs/laarman.pdf"> "the Laarman
