@@ -8,34 +8,35 @@ import graph.State;
 public class SharedData {
   private volatile Map<State, Boolean> red = new HashMap<State, Boolean>();
   private volatile Map<State, Integer> count = new HashMap<State, Integer>();
-  private final ReentrantLock Lock = new ReentrantLock();
+  private final ReentrantLock Counterlock = new ReentrantLock();
+  private final ReentrantLock Redlock = new ReentrantLock();
 
   public void setRed (State state) {
-    Lock.lock();
+    Redlock.lock();
     try {
       this.red.put(state, true);
     } finally {
-      Lock.unlock();
+      Redlock.unlock();
     }
   }
 
   public Boolean getRed (State state) {
     Boolean s = false;
-    Lock.lock();
+    Redlock.lock();
     try {
       s = this.red.get(state);
       if (s == null) s = false;
     } catch (Exception e) {
       System.out.println("getRed Error");
     } finally {
-      Lock.unlock();
+      Redlock.unlock();
     }
 
     return s;
   }
 
   public void changeCount (State state, int amount) {
-    Lock.lock();
+    Counterlock.lock();
     try {
       Integer currentCount = this.count.get(state);
       if (currentCount == null) {
@@ -47,7 +48,7 @@ public class SharedData {
     } catch (Exception e) {
       System.out.println("exception");
     } finally {
-      Lock.unlock();
+      Counterlock.unlock();
     }
   }
 

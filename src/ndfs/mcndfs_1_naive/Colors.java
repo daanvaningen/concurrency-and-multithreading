@@ -11,7 +11,7 @@ import graph.State;
 public class Colors {
 
   private final Map<State, Color> map = new HashMap<State, Color>();
-  private volatile Map<State, Boolean> pink = new HashMap<State, Boolean>();
+  private final Map<State, Boolean> pink = new HashMap<State, Boolean>();
 
   /**
   * Returns <code>true</code> if the specified state has the specified color,
