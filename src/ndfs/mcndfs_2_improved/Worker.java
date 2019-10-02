@@ -103,6 +103,11 @@ public class Worker implements Callable<Void> {
   }
 
   @Override
+  public Void Stop() throws InterruptedException {
+    throw new InterruptedException();
+  }
+
+  @Override
   public Void call() {
     try {
       nndfs(graph.getInitialState());
