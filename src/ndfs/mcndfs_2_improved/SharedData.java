@@ -20,9 +20,9 @@ public class SharedData {
     Boolean s = false;
     synchronized(state){
       s = this.red.get(state);
+      if (s == null) s = false;
     }
-    if (s == null) s = false;
-
+    
     return s;
   }
 
