@@ -20,9 +20,7 @@ public class SharedData {
    * @param State state to be set to true
    */
   public void setRed (State state) {
-    synchronized(this){
       this.red.put(state, true);
-    }
   }
 
   /**
@@ -47,20 +45,6 @@ public class SharedData {
 
       this.count.put(state, currentCount);
     }
-
-    //Counterlock.lock();
-    //try {
-      //Integer currentCount = this.count.get(state);
-      //if (currentCount == null) {
-        //currentCount = new Integer(amount);
-      //} else {
-        //currentCount = new Integer(currentCount + amount);
-      //}
-      // System.out.println(currentCount);
-      //this.count.put(state, currentCount);
-    //} finally {
-      //Counterlock.unlock();
-    //}
   }
 
   /**
@@ -69,8 +53,6 @@ public class SharedData {
    * @param State state count to be retrieved
    */
   public Integer getCount (State state) {
-      Integer currentCount = this.count.get(state);
-      if (currentCount == null) return 0;
-      return currentCount;
+      return this.count.getOrDefault(state, 0);
   }
 }
