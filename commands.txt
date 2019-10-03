@@ -7,6 +7,9 @@
 
 Notes:
 
-BENCH-DEEP.sumo
-  Shuffled blue en red: beste tijd uit 3 was 12000ms
-  Shuffled alleen blue: beste tijd uit 3 was 12112ms
+Zowel de naive versie als de improved versie vind niks bij bench-wide.sumo
+Is de file te groot? duurt het gewoon lang?
+
+Improved versie:
+Geen deadlock in: Accept-cycle.prom, simple-loop.prom, bench-deep.sumo
+Deadlock in: bintree-cycle-min.prom 
