@@ -20,7 +20,7 @@ public class SharedData {
    * @param State state to be set to true
    */
   public void setRed (State state) {
-    synchronized(this.count.get(state)){
+    synchronized(this){
       this.red.put(state, true);
     }
   }
@@ -31,7 +31,7 @@ public class SharedData {
    * @param State state to be retrieved
    */
   public Boolean getRed (State state) {
-    synchronized(this.count.get(state)){
+    synchronized(this){
       return this.red.getOrDefault(state, false);
     }
   }
