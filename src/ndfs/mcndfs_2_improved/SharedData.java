@@ -47,8 +47,7 @@ public class SharedData {
    * @param amount amount to change by (+1, -1)
    */
   public void changeCount (State state, int amount) {
-    Counterlock.lock();
-    try {
+    synchronized(this.count){
       Integer currentCount = this.count.get(state);
       if (currentCount == null) {
         currentCount = new Integer(amount);
@@ -57,9 +56,21 @@ public class SharedData {
       }
       // System.out.println(currentCount);
       this.count.put(state, currentCount);
-    } finally {
-      Counterlock.unlock();
     }
+
+    //Counterlock.lock();
+    //try {
+      //Integer currentCount = this.count.get(state);
+      //if (currentCount == null) {
+        //currentCount = new Integer(amount);
+      //} else {
+        //currentCount = new Integer(currentCount + amount);
+      //}
+      // System.out.println(currentCount);
+      //this.count.put(state, currentCount);
+    //} finally {
+      //Counterlock.unlock();
+    //}
   }
 
   /**
