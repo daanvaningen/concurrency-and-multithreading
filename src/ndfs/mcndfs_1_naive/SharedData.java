@@ -6,11 +6,20 @@ import java.util.Map;
 import graph.State;
 
 public class SharedData {
+  // Shared HashMap for red states
   private volatile Map<State, Boolean> red = new HashMap<State, Boolean>();
+  // Shared HashMap for the counter per state
   private volatile Map<State, Integer> count = new HashMap<State, Integer>();
+  // Lock for the counter
   private final ReentrantLock Counterlock = new ReentrantLock();
+  // Lock for the red states
   private final ReentrantLock Redlock = new ReentrantLock();
 
+  /**
+   * Set a the red state to true
+   *
+   * @param State state to be set to true
+   */
   public void setRed (State state) {
     Redlock.lock();
     try {
@@ -20,6 +29,11 @@ public class SharedData {
     }
   }
 
+  /**
+   * Get the red value of a state
+   *
+   * @param State state to be retrieved
+   */
   public Boolean getRed (State state) {
     Boolean s = false;
     Redlock.lock();
@@ -35,6 +49,12 @@ public class SharedData {
     return s;
   }
 
+  /**
+   * Change the count of a state
+   *
+   * @param State state count to be changed
+   * @param amount amount to change by (+1, -1)
+   */
   public void changeCount (State state, int amount) {
     Counterlock.lock();
     try {
@@ -52,6 +72,11 @@ public class SharedData {
     }
   }
 
+  /**
+   * Get the count of a state
+   *
+   * @param State state count to be retrieved
+   */
   public Integer getCount (State state) {
     Integer currentCount = this.count.get(state);
     if (currentCount == null) return 0;

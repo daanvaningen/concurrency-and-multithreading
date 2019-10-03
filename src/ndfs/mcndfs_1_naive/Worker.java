@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.concurrent.Callable;
 import java.util.*;
 /**
-* This is a straightforward implementation of Figure 1 of
+* This is an implementation of Figure 2 of
 * <a href="http://www.cs.vu.nl/~tcs/cm/ndfs/laarman.pdf"> "the Laarman
 * paper"</a>.
 */
@@ -19,9 +19,9 @@ public class Worker implements Callable<Void> {
 
   private final Graph graph;
   private final Colors colors = new Colors();
-  private SharedData sharedData;
-  public boolean done = false;
-  public boolean result = false;
+  private SharedData sharedData; // Data object that the threads share
+  public boolean done = false; // Indicating whether thread has finished
+  public boolean result = false; // Result of the thread
 
   // Throwing an exception is a convenient way to cut off the search in case a
   // cycle is found.
@@ -45,6 +45,12 @@ public class Worker implements Callable<Void> {
     this.sharedData = sharedData;
   }
 
+
+  /**
+   * Does the coloring of red / pink states as described in Fig 2 of Laarman.
+   *
+   * @param State Node of the graph to be checked.
+   */
   private void dfsRed(State s) throws CycleFoundException, InterruptedException {
     colors.setPink(s, true);
 
@@ -53,11 +59,10 @@ public class Worker implements Callable<Void> {
     Collections.shuffle(postRed);
 
     for (State t : postRed) {
-      if (Thread.interrupted()){
+      if (Thread.interrupted()){ // Check if the thread has been interrupted
         throw new InterruptedException();
       }
       if (colors.hasColor(t, Color.CYAN)) {
-        System.out.println("Cycle Found");
         throw new CycleFoundException();
       }
       if (!colors.isPink(t)
@@ -67,12 +72,17 @@ public class Worker implements Callable<Void> {
     }
     if (s.isAccepting()) {
       sharedData.changeCount(s, -1);
-      while (sharedData.getCount(s) != 0) {}
+      while (sharedData.getCount(s) != 0 && !Thread.interrupted()) {}
     }
     sharedData.setRed(s);
     colors.setPink(s, false);
   }
 
+  /**
+   * Does the coloring of blue / cyan states as described in Fig 2 of Laarman.
+   *
+   * @param State Node of the graph to be checked.
+   */
   private void dfsBlue(State s) throws CycleFoundException, InterruptedException {
     colors.color(s, Color.CYAN);
 
@@ -96,19 +106,27 @@ public class Worker implements Callable<Void> {
     colors.color(s, Color.BLUE);
   }
 
-
-
+  /**
+   * Initialises the NNDFS algorithm with the initial state
+   *
+   * @param State Initial state of the graph
+   */
   private void nndfs(State s) throws CycleFoundException, InterruptedException {
     dfsBlue(s);
   }
 
+  /**
+   * Call function of the ExecutorCompletionService
+   */
   @Override
   public Void call() {
     try {
       nndfs(graph.getInitialState());
       this.done = true;
+      System.out.println("Done reached");
     } catch (CycleFoundException e) {
       this.result = true;
+      System.out.println("Cycle Found");
     } catch (InterruptedException e){
       System.out.println("Thread has been interrupted.");
     }

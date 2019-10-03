@@ -51,7 +51,7 @@ public class Colors {
   public boolean isPink(State state) {
     Boolean p = this.pink.get(state);
     if (p == null) return false;
-    return true;
+    return p;
   }
 
   public void setPink(State state, Boolean value) {
