@@ -31,10 +31,7 @@ public class SharedData {
    * @param State state to be retrieved
    */
   public Boolean getRed (State state) {
-    synchronized(this){
-      Boolean s = this.red.getOrDefault(state, false);
-      return s;
-    }
+      return this.red.getOrDefault(state, false);
   }
 
   /**
