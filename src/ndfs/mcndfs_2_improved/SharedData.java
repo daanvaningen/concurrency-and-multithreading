@@ -32,11 +32,7 @@ public class SharedData {
    */
   public Boolean getRed (State state) {
     synchronized(this){
-      Boolean s = false;
-      s = this.red.get(state);
-      if (s == null) {
-        s = false;
-      }
+      Boolean s = this.red.getOrDefault(state, false);
       return s;
     }
   }
