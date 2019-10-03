@@ -44,10 +44,7 @@ public class SharedData {
    */
   public void changeCount (State state, int amount) {
     synchronized(this.count){
-      Integer currentCount = this.count.getOrDefault(state, 0);
-      currentCount = new Integer(currentCount + amount);
-
-      this.count.put(state, currentCount);
+      this.count.put(state, this.count.getOrDefault(state, 0) + amount);
     }
   }
 
