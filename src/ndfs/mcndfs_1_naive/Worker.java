@@ -123,10 +123,8 @@ public class Worker implements Callable<Void> {
     try {
       nndfs(graph.getInitialState());
       this.done = true;
-      System.out.println("Done reached");
     } catch (CycleFoundException e) {
       this.result = true;
-      System.out.println("Cycle Found");
     } catch (InterruptedException e){
       System.out.println("Thread has been interrupted.");
     }
