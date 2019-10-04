@@ -44,20 +44,9 @@ public class SharedData {
     synchronized(this.count){
       int ccount = this.count.getOrDefault(state, 0) + amount;
       this.count.put(state, ccount);
-
-      if (ccount == 0){
-        this.count.notifyAll();
-      }
-
     }
   }
 
-  public void waitForZero() throws InterruptedException{
-    synchronized(this.count){
-      this.count.wait(150);
-    }
-
-  }
   /**
    * Get the count of a state
    *
