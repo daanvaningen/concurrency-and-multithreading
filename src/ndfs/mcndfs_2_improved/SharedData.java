@@ -10,7 +10,7 @@ public class SharedData {
   // Shared HashMap for red states
   private volatile Map<State, Boolean> red = new HashMap<State, Boolean>();
   // Shared HashMap for the counter per state
-  private volatile Map<State, int> count = new HashMap<State, int>();
+  private volatile Map<State, Int> count = new HashMap<State, Int>();
 
   /**
    * Set a the red state to true
