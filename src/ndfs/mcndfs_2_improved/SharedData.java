@@ -42,10 +42,22 @@ public class SharedData {
    */
   public void changeCount (State state, int amount) {
     synchronized(this.count){
-      this.count.put(state, this.count.getOrDefault(state, 0) + amount);
+      int ccount = this.count.getOrDefault(state, 0) + amount;
+      this.count.put(state, ccount);
+
+      if (ccount == 0){
+        this.count.notifyAll();
+      }
+
     }
   }
 
+  public void waitForZero(){
+    synchronized(this.count){
+      this.count.wait(150);
+    }
+
+  }
   /**
    * Get the count of a state
    *
