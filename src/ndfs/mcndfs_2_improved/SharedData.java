@@ -52,7 +52,7 @@ public class SharedData {
     }
   }
 
-  public void waitForZero(){
+  public void waitForZero() throws InterruptedException{
     synchronized(this.count){
       this.count.wait(150);
     }
