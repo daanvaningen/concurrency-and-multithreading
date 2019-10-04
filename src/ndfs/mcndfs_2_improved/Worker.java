@@ -69,7 +69,7 @@ public class Worker implements Callable<Void> {
       while (sharedData.getCount(s) != 0 && !Thread.interrupted()) {
         try{
           sharedData.waitForZero();
-        } catch (InterruptedException e){ // do nothing}
+        } catch (InterruptedException e){} // do nothing
       }
     }
     sharedData.setRed(s);
