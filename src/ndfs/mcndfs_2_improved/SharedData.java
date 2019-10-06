@@ -36,7 +36,6 @@ public class SharedData {
    * @param State state to be set to true
    */
   public void setRed (State state) {
-    // System.out.println("Set Red");
     this.red.put(state, true);
   }
 
@@ -71,11 +70,10 @@ public class SharedData {
       System.out.println(ccount);
 
       if (ccount == 0){
-        this.setRed(state);
+        synchronized(this.Sleepy){
+          this.Sleepy.notifyAll();}
       }
     }
-    synchronized(this.Sleepy){
-      this.Sleepy.notifyAll();}
 
   }
 
