@@ -22,7 +22,7 @@ public class SharedData {
         this.lockmap.put(state, lock);
         return lock;
       }
-      else{ return this.lockmap.get(state)}
+      else{ return this.lockmap.get(state);}
     }
   }
 
