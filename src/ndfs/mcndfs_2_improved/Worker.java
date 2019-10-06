@@ -91,7 +91,7 @@ public class Worker implements Callable<Void> {
     }
     if (s.isAccepting()) {
       sharedData.changeCount(s, 1);
-      dfsRed(s);
+      if(!sharedData.getRed(t)){dfsRed(s);}
     }
     colors.color(s, Color.BLUE);
   }
