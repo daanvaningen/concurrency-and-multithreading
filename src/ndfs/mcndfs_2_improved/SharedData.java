@@ -16,6 +16,8 @@ public class SharedData {
 
   private volatile Object initialLock;
 
+  private volatile Object CountLock = new Object();
+
   public Object SetandGetLock(State state){
     synchronized(this){
       if (this.lockmap.get(state) == null){
@@ -34,8 +36,10 @@ public class SharedData {
    */
   public void setRed (State state) {
     // acquire the object which corresponds with the state
+    System.out.println("Set Red");
     Object Lock = this.lockmap.get(state);
     if (Lock == null){
+      System.out.println("This should not happen: Lock should already been set by changecount.")
       Lock = SetandGetLock(state);
     }
     synchronized(Lock){
@@ -66,7 +70,7 @@ public class SharedData {
    * @param amount amount to change by (+1, -1)
    */
   public void changeCount (State state, int amount) {
-    synchronized(this.count){
+    synchronized(this.CountLock){
       int ccount = this.count.getOrDefault(state, 0) + amount;
       this.count.put(state, ccount);
     }
@@ -78,12 +82,7 @@ public class SharedData {
    * @param State state count to be retrieved
    */
   public Integer getCount (State state) {
-    // acquire the object which corresponds with the state
-    Object Lock = this.lockmap.get(state);
-    if (Lock == null){
-      Lock = SetandGetLock(state);
-    }
-    synchronized(Lock){
+    synchronized(this.CountLock){
       return this.count.getOrDefault(state, 0);
     }
   }
