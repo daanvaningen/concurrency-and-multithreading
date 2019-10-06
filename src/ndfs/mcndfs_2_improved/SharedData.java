@@ -35,9 +35,6 @@ public class SharedData {
   public void setRed (State state) {
     // acquire the object which corresponds with the state
     lock = lockmap.get(state);
-    if (lock == null){
-      lock = SetandGetLock(state);
-    }
 
     synchronized(lock){
       this.red.put(state, true);
