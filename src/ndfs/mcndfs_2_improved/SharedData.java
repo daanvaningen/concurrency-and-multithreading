@@ -14,14 +14,14 @@ public class SharedData {
   // a object map where object synchronize locks
   private volatile Map<State, Object> lockmap = new HashMap<State, Object>();
 
-  private volatile Object lock;
+  private volatile Object initialLock;
 
   public Object SetandGetLock(State state){
     synchronized(this){
       if (this.lockmap.get(state) == null){
-        lock = new Object();
-        this.lockmap.put(state, lock);
-        return lock;
+        initialLock = new Object();
+        this.lockmap.put(state, initialLock);
+        return initialLock;
       }
       else{ return this.lockmap.get(state);}
     }
