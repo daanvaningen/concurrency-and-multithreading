@@ -86,11 +86,17 @@ public class Worker implements Callable<Void> {
 
       if (colors.hasColor(t, Color.WHITE) && !sharedData.getRed(t)) {
         dfsBlue(t);
+        if (Thread.interrupted()){
+          throw new InterruptedException();
+        }
       }
     }
     if (s.isAccepting()) {
       sharedData.changeCount(s, 1);
       dfsRed(s);
+      if (Thread.interrupted()){
+        throw new InterruptedException();
+      }
     }
     colors.color(s, Color.BLUE);
   }
