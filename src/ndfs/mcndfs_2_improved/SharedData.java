@@ -56,7 +56,7 @@ public class SharedData {
   public void waitUntilUpdate (){
     synchronized(this){
       try{
-        this.wait(100);
+        this.wait(500);
       } catch (InterruptedException e) { // do nothing
       }
     }
