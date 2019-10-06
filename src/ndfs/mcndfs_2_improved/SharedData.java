@@ -85,7 +85,9 @@ public class SharedData {
   public void waitUntilZero(State state){
     Object Lock = this.lockmap.get(state);
     synchronized(Lock){
-      Lock.wait();
+      try{
+        Lock.wait();
+      } catch(InterruptedException e){}
     }
   }
 }
