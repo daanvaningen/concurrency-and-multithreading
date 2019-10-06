@@ -74,7 +74,7 @@ public class Worker implements Callable<Void> {
         }
       }
     }
-    sharedData.setRed(state);
+    sharedData.setRed(s);
     colors.setPink(s, false);
   }
 
