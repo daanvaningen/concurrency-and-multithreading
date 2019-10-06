@@ -86,7 +86,7 @@ public class SharedData {
     Object Lock = this.lockmap.get(state);
     synchronized(Lock){
       try{
-        Lock.wait();
+        Lock.wait(100);
       } catch(InterruptedException e){}
     }
   }
