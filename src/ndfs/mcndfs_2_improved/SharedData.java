@@ -19,9 +19,9 @@ public class SharedData {
   public Object SetandGetLock(State state){
     synchronized(this){
       if (this.lockmap.get(state) == null){
-        this.lock = new Object();
-        this.lockmap.put(state, this.lock);
-        return this.lock;
+        lock = new Object();
+        this.lockmap.put(state, lock);
+        return lock;
       }
       else{ return this.lockmap.get(state);}
     }
@@ -78,6 +78,13 @@ public class SharedData {
    * @param State state count to be retrieved
    */
   public Integer getCount (State state) {
+    // acquire the object which corresponds with the state
+    Object Lock = this.lockmap.get(state);
+    if (Lock == null){
+      Lock = SetandGetLock(state);
+    }
+    synchronized(Lock){
       return this.count.getOrDefault(state, 0);
+    }
   }
 }
