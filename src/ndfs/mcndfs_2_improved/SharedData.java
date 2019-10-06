@@ -82,7 +82,7 @@ public class SharedData {
     return this.count.getOrDefault(state, 0);
   }
 
-  public void waitUntilZero(State state){
+  public void waitUntilZero(State state) throws InterruptedException{
     Object Lock = this.lockmap.get(state);
     synchronized(Lock){
       Lock.wait();
