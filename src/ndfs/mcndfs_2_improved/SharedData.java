@@ -19,9 +19,9 @@ public class SharedData {
   public Object SetandGetLock(State state){
     synchronized(this){
       if (this.lockmap.get(state) == null){
-        lock = new Object();
+        this.lock = new Object();
         this.lockmap.put(state, lock);
-        return lock;
+        return this.lock;
       }
       else{ return this.lockmap.get(state);}
     }
