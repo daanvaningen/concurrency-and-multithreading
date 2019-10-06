@@ -16,7 +16,7 @@ public class SharedData {
 
   private volatile Object initialLock;
   private volatile Object CountLock;
-  
+
   public Object SetandGetLock(State state){
     // System.out.println("Lock created and set.");
     synchronized(this){
@@ -61,7 +61,7 @@ public class SharedData {
    * @param amount amount to change by (+1, -1)
    */
   public void changeCount (State state, int amount) {
-    synchronized(CountLock){
+    synchronized(this.CountLock){
       int ccount = this.count.getOrDefault(state, 0) + amount;
       this.count.put(state, ccount);
 
@@ -84,8 +84,7 @@ public class SharedData {
   }
 
   public void waitUntilZero(State state){
-    Object Lock = this.lockmap.get(state);
-    synchronized(CountLock){
+    synchronized(this.CountLock){
       try{
         CountLock.wait(100);
       } catch(InterruptedException e){}
