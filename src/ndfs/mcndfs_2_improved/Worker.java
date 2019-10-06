@@ -67,7 +67,9 @@ public class Worker implements Callable<Void> {
     if (s.isAccepting()) {
       sharedData.changeCount(s, -1);
       while (sharedData.getCount(s) != 0 && !Thread.interrupted()) {
-        sharedData.waitUntilZero(s);
+        try{
+          sharedData.waitUntilZero(s);
+        } catch(InterruptedException e){}
         }
     }
     colors.setPink(s, false);
