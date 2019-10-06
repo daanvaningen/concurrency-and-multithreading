@@ -59,7 +59,7 @@ public class SharedData {
   public void changeCount (State state, int amount) {
     Object Lock = this.lockmap.get(state);
     if (Lock == null){
-      System.out.println("Does this happen?")
+      System.out.println("Does this happen?");
       Lock = SetandGetLock(state);
     }
     synchronized(Lock){
