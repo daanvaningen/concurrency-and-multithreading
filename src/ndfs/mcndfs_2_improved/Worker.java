@@ -47,7 +47,9 @@ public class Worker implements Callable<Void> {
 
   private void dfsRed(State s) throws CycleFoundException, InterruptedException {
     colors.setPink(s, true);
-
+    if (Thread.interrupted()){
+      throw new InterruptedException();
+    }
     // Shuffle the post list of s
     List<State> postRed = graph.post(s);
     Collections.shuffle(postRed);
@@ -77,7 +79,9 @@ public class Worker implements Callable<Void> {
 
   private void dfsBlue(State s) throws CycleFoundException, InterruptedException {
     colors.color(s, Color.CYAN);
-
+    if (Thread.interrupted()){
+      throw new InterruptedException();
+    }
     // Shuffle the post list of s
     List<State> post = graph.post(s);
     Collections.shuffle(post);
