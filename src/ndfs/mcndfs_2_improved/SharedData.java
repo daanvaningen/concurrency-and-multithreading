@@ -38,10 +38,8 @@ public class SharedData {
    * @param amount amount to change by (+1, -1)
    */
   public void changeCount (State state, int amount) {
-    synchronized(this.count){
       int ccount = this.count.getOrDefault(state, 0) + amount;
       this.count.put(state, ccount);
-    }
   }
 
   /**
