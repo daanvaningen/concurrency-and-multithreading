@@ -36,7 +36,13 @@ public class SharedData {
    * @param State state to be set to true
    */
   public void setRed (State state) {
-    this.red.put(state, true);
+    Object Lock = this.lockmap.get(state);
+    if (Lock == null){
+      Lock = SetandGetLock(state);
+    }
+    synchronized(Lock){
+      this.red.put(state, true);
+    }
   }
 
   /**
@@ -57,7 +63,9 @@ public class SharedData {
    */
   public void changeCount (State state, int amount) {
     Object Lock = this.lockmap.get(state);
-
+    if (Lock == null){
+      Lock = SetandGetLock(state);
+    }
     synchronized(Lock){
       int ccount = this.count.getOrDefault(state, 0) + amount;
       this.count.put(state, ccount);
@@ -65,8 +73,7 @@ public class SharedData {
       System.out.println(ccount);
 
       if (ccount == 0){
-        synchronized(this.Sleepy){
-          this.Sleepy.notifyAll();}
+        Lock.notifyAll();
       }
     }
 
@@ -82,9 +89,10 @@ public class SharedData {
   }
 
   public void waitUntilZero(State state){
-    synchronized(this.Sleepy){
+    Object Lock = this.lockmap.get(state);
+    synchronized(Lock){
       try{
-        this.Sleepy.wait();
+        Lock.wait();
       } catch(InterruptedException e){}
     }
   }
