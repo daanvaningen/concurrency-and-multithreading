@@ -39,6 +39,9 @@ public class SharedData {
    */
   public void changeCount (State state, int amount) {
       this.count.put(state, this.count.getOrDefault(state, 0) + amount);
+      synchronized(this){
+        this.notifyAll();
+      }
   }
 
   /**
@@ -48,5 +51,14 @@ public class SharedData {
    */
   public Integer getCount (State state) {
       return this.count.getOrDefault(state, 0);
+  }
+
+  public void waitUntilUpdate (){
+    synchronized(this){
+      try{
+        this.wait(100)
+      } catch (InterruptedException e) { // do nothing
+      }
+    }
   }
 }
