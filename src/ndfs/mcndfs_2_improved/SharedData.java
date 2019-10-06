@@ -11,6 +11,19 @@ public class SharedData {
   private volatile Map<State, Boolean> red = new HashMap<State, Boolean>();
   // Shared HashMap for the counter per state
   private volatile Map<State, Integer> count = new HashMap<State, Integer>();
+  // a object map where object synchronize locks
+  private volatile Map<State, Object> lockmap = new HashMap<State, Object>();
+
+
+  public Object SetandGetLock(State state){
+    synchronized(this){
+      if (this.lockmap.get(state) == null){
+        Object lock = new Object();
+        this.lockmap.put(state, lock);
+        return lock;
+      }
+    }
+  }
 
   /**
    * Set a the red state to true
@@ -18,7 +31,13 @@ public class SharedData {
    * @param State state to be set to true
    */
   public void setRed (State state) {
-    synchronized(this){
+    // acquire the object which corresponds with the state
+    Object lock = lockmap.get(state);
+    if (lock == null){
+      lock = SetandGetLock(state);
+    }
+
+    synchronized(lock){
       this.red.put(state, true);
     }
   }
@@ -29,7 +48,13 @@ public class SharedData {
    * @param State state to be retrieved
    */
   public Boolean getRed (State state) {
-    synchronized(this){
+    // acquire the object which corresponds with the state
+    Object lock = lockmap.get(state);
+    if (lock == null){
+      lock = SetandGetLock(state);
+    }
+
+    synchronized(lock){
       return this.red.getOrDefault(state, false);
     }
   }
