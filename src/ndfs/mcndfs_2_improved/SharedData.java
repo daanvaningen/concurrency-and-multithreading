@@ -17,7 +17,6 @@ public class SharedData {
   private volatile Object lock;
 
   public Object SetandGetLock(State state){
-    System.out.println("This happens");
     synchronized(this){
       if (this.lockmap.get(state) == null){
         lock = new Object();
