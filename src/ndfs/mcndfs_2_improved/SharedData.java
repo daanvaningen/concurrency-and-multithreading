@@ -40,7 +40,7 @@ public class SharedData {
   public void changeCount (State state, int amount) {
       int ccount = this.count.getOrDefault(state, 0) + amount;
       this.count.put(state, ccount);
-      System.out.println("ccount");
+      System.out.println(ccount);
   }
 
   /**
