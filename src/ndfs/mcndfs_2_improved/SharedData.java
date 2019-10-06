@@ -61,7 +61,7 @@ public class SharedData {
    * @param amount amount to change by (+1, -1)
    */
   public void changeCount (State state, int amount) {
-    synchronized(this.CountLock){
+    synchronized(this.count){
       int ccount = this.count.getOrDefault(state, 0) + amount;
       this.count.put(state, ccount);
 
@@ -84,7 +84,7 @@ public class SharedData {
   }
 
   public void waitUntilZero(State state){
-    synchronized(this.CountLock){
+    synchronized(this.count){
       try{
         CountLock.wait(100);
       } catch(InterruptedException e){}
