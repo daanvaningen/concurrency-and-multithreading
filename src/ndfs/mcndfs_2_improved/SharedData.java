@@ -62,7 +62,7 @@ public class SharedData {
       Lock = SetandGetLock(state);
     }
     synchronized(Lock){
-      if (getRed(state) || Thread.interrupted()){return;}
+      if (getRed(state)){return;}
       int ccount = this.count.getOrDefault(state, 0) + amount;
       this.count.put(state, ccount);
 
