@@ -66,7 +66,6 @@ public class Worker implements Callable<Void> {
     }
     if (s.isAccepting()) {
       sharedData.changeCount(s, -1);
-      System.out.println("Does it come here at the end?");
       while (sharedData.getCount(s) != 0 && !sharedData.getRed(s)) {
         sharedData.waitUntilZero(s);
         if (Thread.interrupted()){
