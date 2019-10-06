@@ -73,9 +73,9 @@ public class SharedData {
       if (ccount == 0){
         this.setRed(state);
       }
-      
-      synchronized(this.Sleepy){
-        Lock.notifyAll();}
+    }
+    synchronized(this.Sleepy){
+      Lock.notifyAll();}
 
   }
 
