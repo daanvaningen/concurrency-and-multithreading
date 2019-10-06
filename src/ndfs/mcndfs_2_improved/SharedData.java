@@ -16,7 +16,7 @@ public class SharedData {
 
   private volatile Object initialLock;
 
-  private volatile Object CountLock = new Object();
+  private volatile Object Sleepy = new Object();
 
   public Object SetandGetLock(State state){
     // System.out.println("Lock created and set.");
@@ -63,10 +63,7 @@ public class SharedData {
    */
   public void changeCount (State state, int amount) {
     Object Lock = this.lockmap.get(state);
-    if (Lock == null){
-      System.out.println("Does this happen?");
-      Lock = SetandGetLock(state);
-    }
+
     synchronized(Lock){
       int ccount = this.count.getOrDefault(state, 0) + amount;
       this.count.put(state, ccount);
@@ -75,8 +72,11 @@ public class SharedData {
 
       if (ccount == 0){
         this.setRed(state);
+      }
+      
+      synchronized(this.Sleepy){
         Lock.notifyAll();}
-    }
+
   }
 
   /**
@@ -89,8 +89,7 @@ public class SharedData {
   }
 
   public void waitUntilZero(State state){
-    Object Lock = this.lockmap.get(state);
-    synchronized(Lock){
+    synchronized(this.Sleepy){
       try{
         Lock.wait();
       } catch(InterruptedException e){}
