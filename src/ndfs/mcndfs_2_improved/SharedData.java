@@ -39,7 +39,7 @@ public class SharedData {
     System.out.println("Set Red");
     Object Lock = this.lockmap.get(state);
     if (Lock == null){
-      System.out.println("This should not happen: Lock should already been set by changecount.")
+      System.out.println("This should not happen: Lock should already been set by changecount.");
       Lock = SetandGetLock(state);
     }
     synchronized(Lock){
