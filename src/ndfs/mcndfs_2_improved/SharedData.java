@@ -14,11 +14,13 @@ public class SharedData {
   // a object map where object synchronize locks
   private volatile Map<State, Object> lockmap = new HashMap<State, Object>();
 
+  private volatile Object lock;
 
   public Object SetandGetLock(State state){
+    System.out.println("This happens");
     synchronized(this){
       if (this.lockmap.get(state) == null){
-        Object lock = new Object();
+        lock = new Object();
         this.lockmap.put(state, lock);
         return lock;
       }
@@ -33,7 +35,7 @@ public class SharedData {
    */
   public void setRed (State state) {
     // acquire the object which corresponds with the state
-    Object lock = lockmap.get(state);
+    lock = lockmap.get(state);
     if (lock == null){
       lock = SetandGetLock(state);
     }
@@ -50,7 +52,7 @@ public class SharedData {
    */
   public Boolean getRed (State state) {
     // acquire the object which corresponds with the state
-    Object lock = lockmap.get(state);
+    lock = lockmap.get(state);
     if (lock == null){
       lock = SetandGetLock(state);
     }
