@@ -46,14 +46,8 @@ public class SharedData {
    * @param State state to be retrieved
    */
   public Boolean getRed (State state) {
-    // acquire the object which corresponds with the state
-    Object Lock = this.lockmap.get(state);
-    if (Lock == null){
-      Lock = SetandGetLock(state);
-    }
-    synchronized(Lock){
-      return this.red.getOrDefault(state, false);
-    }
+    return this.red.getOrDefault(state, false);
+
   }
 
   /**
@@ -68,6 +62,7 @@ public class SharedData {
       Lock = SetandGetLock(state);
     }
     synchronized(Lock){
+      if (this.red.get(state)){return;}
       int ccount = this.count.getOrDefault(state, 0) + amount;
       System.out.println(ccount);
       this.count.put(state, ccount);
