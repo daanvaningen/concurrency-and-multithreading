@@ -82,8 +82,6 @@ public class SharedData {
    * @param State state count to be retrieved
    */
   public Integer getCount (State state) {
-    synchronized(this.CountLock){
-      return this.count.getOrDefault(state, 0);
-    }
+    return this.count.getOrDefault(state, 0);
   }
 }
