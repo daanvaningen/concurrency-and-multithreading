@@ -20,7 +20,7 @@ public class SharedData {
     synchronized(this){
       if (this.lockmap.get(state) == null){
         this.lock = new Object();
-        this.lockmap.put(state, lock);
+        this.lockmap.put(state, this.lock);
         return this.lock;
       }
       else{ return this.lockmap.get(state);}
@@ -34,7 +34,7 @@ public class SharedData {
    */
   public void setRed (State state) {
     // acquire the object which corresponds with the state
-    Lock = this.lockmap.get(state);
+    Object Lock = this.lockmap.get(state);
     if (Lock == null){
       Lock = SetandGetLock(state);
     }
@@ -50,7 +50,7 @@ public class SharedData {
    */
   public Boolean getRed (State state) {
     // acquire the object which corresponds with the state
-    Lock = this.lockmap.get(state);
+    Object Lock = this.lockmap.get(state);
     if (Lock == null){
       Lock = SetandGetLock(state);
     }
