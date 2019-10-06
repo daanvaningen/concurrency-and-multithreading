@@ -9,9 +9,9 @@ import graph.State;
 
 public class SharedData {
   // Shared HashMap for red states
-  private volatile Map<State, Boolean> red = new HashMap<State, Boolean>();
+  private volatile Map<State, Boolean> red = new ConcurrentHashMap<State, Boolean>();
   // Shared HashMap for the counter per state
-  private volatile Map<State, Integer> count = new HashMap<State, Integer>();
+  private volatile Map<State, Integer> count = new ConcurrentHashMap<State, Integer>();
 
   /**
    * Set a the red state to true
