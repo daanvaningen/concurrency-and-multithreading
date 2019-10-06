@@ -2,6 +2,7 @@ package ndfs.mcndfs_2_improved;
 
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.HashMap;
 import java.util.Map;
 import graph.State;
