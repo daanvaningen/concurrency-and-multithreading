@@ -62,7 +62,7 @@ public class SharedData {
       Lock = SetandGetLock(state);
     }
     synchronized(Lock){
-      if (this.red.getOrDefault(state, false)){return;}
+      if (getRed(state)){return;}
       int ccount = this.count.getOrDefault(state, 0) + amount;
       System.out.println(ccount);
       this.count.put(state, ccount);
