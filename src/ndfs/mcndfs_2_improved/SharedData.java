@@ -66,12 +66,7 @@ public class SharedData {
    * @param amount amount to change by (+1, -1)
    */
   public void changeCount (State state, int amount) {
-    // acquire the object which corresponds with the state
-    Object Lock = this.lockmap.get(state);
-    if (Lock == null){
-      Lock = SetandGetLock(state);
-    }
-    synchronized(Lock){
+    synchronized(this.count){
       int ccount = this.count.getOrDefault(state, 0) + amount;
       this.count.put(state, ccount);
     }
