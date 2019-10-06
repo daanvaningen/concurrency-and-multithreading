@@ -15,7 +15,6 @@ public class SharedData {
   private volatile Map<State, Object> lockmap = new HashMap<State, Object>();
 
   private volatile Object initialLock;
-  private volatile Object CountLock = new Object();
 
   public Object SetandGetLock(State state){
     // System.out.println("Lock created and set.");
@@ -72,10 +71,6 @@ public class SharedData {
       this.count.put(state, ccount);
 
       System.out.println(ccount);
-
-      if (ccount == 0){
-        this.CountLock.notifyAll();
-      }
     }
 
   }
