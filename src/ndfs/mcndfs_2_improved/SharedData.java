@@ -68,7 +68,7 @@ public class SharedData {
       System.out.println(ccount);
 
       if (ccount == 0){
-        CountLock.notifyAll();
+        this.CountLock.notifyAll();
       }
     }
 
