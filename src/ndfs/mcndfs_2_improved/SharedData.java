@@ -75,7 +75,7 @@ public class SharedData {
       }
     }
     synchronized(this.Sleepy){
-      Lock.notifyAll();}
+      this.Sleepy.notifyAll();}
 
   }
 
@@ -91,7 +91,7 @@ public class SharedData {
   public void waitUntilZero(State state){
     synchronized(this.Sleepy){
       try{
-        Lock.wait();
+        this.Sleepy.wait();
       } catch(InterruptedException e){}
     }
   }
