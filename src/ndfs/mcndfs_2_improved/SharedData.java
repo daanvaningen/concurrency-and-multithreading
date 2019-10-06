@@ -19,7 +19,7 @@ public class SharedData {
   private volatile Object CountLock = new Object();
 
   public Object SetandGetLock(State state){
-    // System.out.println("Lock created and set.");
+    System.out.println("Lock created and set.");
     synchronized(this){
       initialLock = this.lockmap.get(state);
       if (initialLock == null){
@@ -36,7 +36,7 @@ public class SharedData {
    * @param State state to be set to true
    */
   public void setRed (State state) {
-    // System.out.println("Set Red");
+    System.out.println("Set Red");
     this.red.put(state, true);
   }
 
@@ -66,9 +66,10 @@ public class SharedData {
       int ccount = this.count.getOrDefault(state, 0) + amount;
       this.count.put(state, ccount);
 
-      // System.out.println(ccount);
+      System.out.println(ccount);
 
       if (ccount == 0){setRed(state);}
+      Lock.notifyAll();
     }
   }
 
@@ -79,5 +80,12 @@ public class SharedData {
    */
   public Integer getCount (State state) {
     return this.count.getOrDefault(state, 0);
+  }
+
+  public void waitUntilZero(State state){
+    Object Lock = this.lockmap.get(state);
+    synchronized(Lock){
+      Lock.wait();
+    }
   }
 }
