@@ -34,7 +34,7 @@ public class SharedData {
    * @param State state to be set to true
    */
   public void setRed (State state) {
-    Object Lock = this.lockmap.get(state);
+    Obj Lock = this.lockmap.get(state);
     if (Lock == null){
       Lock = SetandGetLock(state);
     }
