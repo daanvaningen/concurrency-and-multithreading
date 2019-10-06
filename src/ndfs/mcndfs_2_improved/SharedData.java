@@ -36,16 +36,8 @@ public class SharedData {
    * @param State state to be set to true
    */
   public void setRed (State state) {
-    // acquire the object which corresponds with the state
     System.out.println("Set Red");
-    Object Lock = this.lockmap.get(state);
-    if (Lock == null){
-      System.out.println("This should not happen: Lock should already been set by changecount.");
-      Lock = SetandGetLock(state);
-    }
-    synchronized(Lock){
-      this.red.put(state, true);
-    }
+    this.red.put(state, true);
   }
 
   /**
@@ -71,10 +63,16 @@ public class SharedData {
    * @param amount amount to change by (+1, -1)
    */
   public void changeCount (State state, int amount) {
-    synchronized(this.CountLock){
+    Object Lock = this.lockmap.get(state);
+    if (Lock == null){
+      Lock = SetandGetLock(state);
+    }
+    synchronized(Lock){
       int ccount = this.count.getOrDefault(state, 0) + amount;
       System.out.println(ccount);
       this.count.put(state, ccount);
+
+      if (ccount == 0){setRed(state);}
     }
   }
 
