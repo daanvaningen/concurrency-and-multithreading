@@ -50,7 +50,13 @@ public class SharedData {
    * @param State state to be retrieved
    */
   public Boolean getRed (State state) {
-    return this.red.getOrDefault(state, false);
+    Object Lock = this.lockmap.get(state);
+    if (Lock == null){
+      Lock = SetandGetLock(state);
+    }
+    synchronized(Lock){
+      return this.red.getOrDefault(state, false);
+    }
 
   }
 
