@@ -19,7 +19,6 @@ public class Worker implements Callable<Void> {
 
   private final Graph graph;
   private final Colors colors = new Colors();
-  private final int id;
   private SharedData sharedData;
   public boolean done = false;
   public boolean result = false;
