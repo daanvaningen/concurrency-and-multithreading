@@ -19,6 +19,7 @@ public class Worker implements Callable<Void> {
 
   private final Graph graph;
   private final Colors colors = new Colors();
+  private final int id;
   private SharedData sharedData;
   public boolean done = false;
   public boolean result = false;
@@ -68,13 +69,14 @@ public class Worker implements Callable<Void> {
     }
     if (s.isAccepting()) {
       sharedData.changeCount(s, -1);
-      while (sharedData.getCount(s) != 0 && !Thread.interrupted()) {
+      while (sharedData.getCount(s) != 0) {
+        if (Thread.interrupted()){
+          throw new InterruptedException();
+        }
         sharedData.waitUntilUpdate();
       }
     }
-    if (Thread.interrupted()){
-      throw new InterruptedException();
-    }
+
     sharedData.setRed(s);
     colors.setPink(s, false);
   }
@@ -121,6 +123,7 @@ public class Worker implements Callable<Void> {
     try {
       nndfs(graph.getInitialState());
       this.done = true;
+      System.out.println("Done");
     } catch (CycleFoundException e) {
       System.out.println("Cycle Found");
       this.result = true;

@@ -28,7 +28,7 @@ public class SharedData {
    * @param State state to be retrieved
    */
   public Boolean getRed (State state) {
-      return this.red.getOrDefault(state, false);
+    return this.red.getOrDefault(state, false);
   }
 
   /**
@@ -38,10 +38,22 @@ public class SharedData {
    * @param amount amount to change by (+1, -1)
    */
   public void changeCount (State state, int amount) {
-      this.count.put(state, this.count.getOrDefault(state, 0) + amount);
-      synchronized(this){
-        this.notifyAll();
-      }
+    this.initCount(state);
+    boolean result = true;
+    do {
+      Integer current = this.count.get(state);
+      Integer newAmount = new Integer(current + amount);
+      result = !this.count.replace(state, current, newAmount);
+    } while (result);
+    synchronized(this){
+      this.notifyAll();
+    }
+  }
+
+  public void initCount (State state) {
+    synchronized(this) { // Make sure state are absolutely unique within the table
+      if (!this.count.containsKey(state)) this.count.put(state, 0);
+    }
   }
 
   /**
@@ -50,7 +62,7 @@ public class SharedData {
    * @param State state count to be retrieved
    */
   public Integer getCount (State state) {
-      return this.count.getOrDefault(state, 0);
+    return this.count.getOrDefault(state, 0);
   }
 
   public void waitUntilUpdate (){
